@@ -1,0 +1,163 @@
+#!/bin/zsh
+
+### EXPORT
+export PATH=$HOME/bin:/usr/.local/bin:$PATH      # If bash config might have to change your $PATH.
+# export TERM="xterm-256color"                    # getting proper colors
+# export DISABLE_UPDATE_PROMPT="true"           # Automatically update without prompting.
+export UPDATE_ZSH_DAYS=5                        # Change how often to auto-update (in days).
+# export DISABLE_AUTO_TITLE="true"              # Disable auto-setting terminal title.
+export COMPLETION_WAITING_DOTS="true"           # Display red dots whilst waiting for completion.
+
+# Disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+export DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+autoload -U +X bashcompinit && bashcompinit
+
+# vi mode
+# bindkey -v
+# export KEYTIMEOUT=1
+
+# ci", ci', ci`, di", etc
+# autoload -U select-quoted
+# zle -N select-quoted
+# for m in visual viopp; do
+#   for c in {a,i}{\',\",\`}; do
+#     bindkey -M $m $c select-quoted
+#   done
+# done
+
+# ci{, ci(, ci<, di{, etc
+# autoload -U select-bracketed
+# zle -N select-bracketed
+# for m in visual viopp; do
+#   for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+#     bindkey -M $m $c select-bracketed
+#   done
+# done
+
+# Control bindings for programs
+bindkey -s "^g" "lc\n"
+bindkey -s "^h" "history 1\n"
+bindkey -s "^l" "clear\n"
+bindkey -s "^d" "dlfile\n"
+
+### CHANGE TITLE OF TERMINALS
+case ${TERM} in
+  xterm*|rxvt*|Eterm*|aterm|iterm*|kterm|gnome*|alacritty|st|konsole*)
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+        ;;
+  screen*)
+    PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+    ;;
+esac
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/thacken/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/thacken/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/thacken/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/thacken/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+### Function extract for common file formats ###
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+function extract {
+ if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+ else
+    for n in "$@"
+    do
+      if [ -f "$n" ] ; then
+          case "${n%,}" in
+            *.cbt|*.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
+                         tar xvf "$n"       ;;
+            *.lzma)      unlzma ./"$n"      ;;
+            *.bz2)       bunzip2 ./"$n"     ;;
+            *.cbr|*.rar)       unrar x -ad ./"$n" ;;
+            *.gz)        gunzip ./"$n"      ;;
+            *.cbz|*.epub|*.zip)       unzip ./"$n"       ;;
+            *.z)         uncompress ./"$n"  ;;
+            *.7z|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
+                         7z x ./"$n"        ;;
+            *.xz)        unxz ./"$n"        ;;
+            *.exe)       cabextract ./"$n"  ;;
+            *.cpio)      cpio -id < ./"$n"  ;;
+            *.cba|*.ace)      unace x ./"$n"      ;;
+            *)
+                         echo "extract: '$n' - unknown archive method"
+                         return 1
+                         ;;
+          esac
+      else
+          echo "'$n' - file does not exist"
+          return 1
+      fi
+    done
+fi
+}
+
+IFS=$SAVEIFS
+
+# navigation
+up () {
+  local d=""
+  local limit="$1"
+
+  # Default to limit of 1
+  if [ -z "$limit" ] || [ "$limit" -le 0 ]; then
+    limit=1
+  fi
+
+  for ((i=1;i<=limit;i++)); do
+    d="../$d"
+  done
+
+  # perform cd. Show error if cd fails
+  if ! cd "$d"; then
+    echo "Couldn't go up $limit dirs.";
+  fi
+}
+
+## Initialize Ruby via rbenv ##
+eval "$(rbenv init -)"
+
+## set dircolors ##
+# eval `dircolors /home/thacken/.dir_colors/dircolors`
+
+### SETTING THE STARSHIP PROMPT ###
+# eval "$(starship init zsh)"
+
+source "$HOME/.cargo/env"
+. "$HOME/.cargo/env"
+
+bindkey '^`' autosuggest-clear
+
+source $(dirname $(gem which colorls))/tab_complete.sh
+eval "$(pyenv init -)"
+
+# tabtab source for pnpm package
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+eval "$(mcfly init zsh)"

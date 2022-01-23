@@ -1,0 +1,43 @@
+swipe:
+  3:
+    left:
+      command: 'xdotool key alt+Tab'
+    right:
+      command: 'xdotool key alt+Tab'
+    up:
+      command: 'xdotool key ctrl+alt+Up'
+    down:
+      command: 'xdotool key ctrl+alt+Down'
+  4:
+    left:
+      command: 'xdotool key ctrl+alt+Up'
+    right:
+      command: 'xdotool key ctrl+alt+Down'
+    up:
+      command: 'xdotool key ctrl+alt+Up'
+    down:
+      command: 'xdotool key ctrl+alt+Down'
+tap:
+  3:
+    command: 'xdotool key super'
+  4:
+    command: 'xdotool key super'
+pinch:
+  in:
+    command: 'xdotool key ctrl+plus'
+  out:
+    command: 'xdotool key ctrl+minus'
+
+threshold:
+  swipe: 0.4
+  pinch: 0.4
+
+interval:
+  swipe: 0.8
+  pinch: 0.1
+
+plugin: 
+  inputs:
+    libinput_command_input:
+      enable-tap: true
+      verbose: true

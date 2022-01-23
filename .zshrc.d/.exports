@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# History in cache directory:
+# export SAVEHIST='32768'
+# export HISTFILE="$HOME/.zsh_history"
+# export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+
+export DONT_PRINT_SSH_KEY_LIST='true'
+export ZSH_QUICKSTART_SKIP_TRAPINT='false'
+export QUICKSTART_KIT_REFRESH_IN_DAYS='5'
+
+export MANPATH="/usr/local/man:$MANPATH"
+export CHEAT_CONFIG_PATH="$HOME/.config/cheat/conf.yml"
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+else
+  export EDITOR='nano'
+fi
+
+# Compilation flags
+export ARCHFLAGS="-arch x86_64"
+
+# .NET SDK install location
+export DOTNET_ROOT=/snap/dotnet-sdk/current
+
+# Set OS for tldr cheatsheets
+export TLDR_OS=linux
+
+export GITSTATUS_LOG_LEVEL=DEBUG
+
+# Setup fontpreview environment variables
+# Input prompt of fuzzy searcher
+# export FONTPREVIEW_SEARCH_PROMPT="❯ "
+
+# Make vim the default editor.
+# export EDITOR='vim';
+
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY="$HOME/.node_history";
+# Allow 32³ entries; the default is 1000.
+export NODE_REPL_HISTORY_SIZE='32768';
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE='sloppy';
+
+export YARN_RC_FILENAME=".yarnrc.yml";
+
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING='UTF-8';
+
+# Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE='32768';
+export HISTFILESIZE="${HISTSIZE}";
+# Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL='ignoreboth';
+
+# Prefer US English and use UTF-8.
+export LANG='en_US.UTF-8';
+export LC_ALL='en_US.UTF-8';
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}";
+
+# Don’t clear the screen after quitting a manual page.
+export MANPAGER='less -X';
+
+# Avoid issues with `gpg` as installed via Homebrew.
+# https://stackoverflow.com/a/42265848/96656
+# export GPG_TTY=$(tty);

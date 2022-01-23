@@ -1,0 +1,1 @@
+/home/thacken/.local/share/dracula/ranger/dracula.py

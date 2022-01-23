@@ -1,0 +1,14 @@
+.cache
+.next
+coverage
+http
+public
+.history
+out
+node_modules
+package.json
+package-lock.json
+yarn.lock
+db
+*.md
+*.mdx

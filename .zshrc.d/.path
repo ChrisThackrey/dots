@@ -1,0 +1,89 @@
+#!/usr/bin/env sh
+
+export PATH="/usr/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.config:$PATH"
+export PATH="$HOME/.local/share:$PATH"
+
+# PATH
+if [ -d "$HOME/.bin" ] ;
+  then PATH="$HOME/.bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ] ;
+  then PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -d "$HOME/Applications" ] ;
+  then PATH="$HOME/Applications:$PATH"
+fi
+
+# Add $PATH variables
+export NVM_DIR="$HOME/.nvm";
+
+# Set Python PATH Variable
+export PYTHONPATH="/usr/bin/python3.8";
+
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk";
+
+export DENO_INSTALL="$HOME/.deno"
+
+# Add snaps to the `$PATH`
+export PATH="/snap/bin:$PATH"
+export PATH="/snap/bin/flutter:$PATH"
+export PATH="/snap/bin/dart:$PATH"
+export PATH="/snap/bin/kotlin:$PATH"
+
+# Add Android Sdk locale to the PATH
+export PATH="$HOME/Android/Sdk:$PATH"
+
+# Add yarn global packages to the $PATH
+export PATH="$HOME/.yarn/bin:$PATH"
+
+# Set exa paths
+export PATH="$HOME/.exa:$PATH"
+export PATH="$HOME/.exa/bin:$PATH"
+
+# Set Node.js path to nvm installed version
+export PATH="$HOME/.nvm/versions/node/v16.7.0/bin/node:$PATH"
+# Add the NVM Directory Paths
+[ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh";  # This loads nvm
+# This loads nvm bash_completion
+[ -s "$HOME/.nvm/bash_completion" ] && \. "$HOME/.nvm/bash_completion";
+
+export PATH="$HOME/.config/npm/global/lib:$PATH"
+export PATH="$HOME/.config/npm/global/bin:$PATH"
+export PATH="$HOME/.nvm/.npm-packages/bin:$PATH"
+export PATH="$HOME/opt:$PATH"
+export PATH="$HOME/opt/phantomjs-2.1.1-linux-x86_64:$PATH"
+export PATH="$HOME/opt/phantomjs-2.1.1-linux-x86_64/bin:$PATH"
+
+# Set go path
+export PATH="/usr/local/go/bin:$PATH"
+
+# Add Rust cargo paths
+export PATH="$HOME/.cargo:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.cargo/env:$PATH"
+
+# Add python to the `$PATH`
+export PATH="/usr/bin/python2.7:$PATH"
+# Add python3 to the `$PATH`
+export PATH="/usr/bin/python3.8:$PATH"
+
+# Add Android SDK and Emulator to the `$PATH`
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH"
+# Add Android Studio to the `$PATH`
+export PATH="$HOME/Android/Sdk/tools:$PATH"
+export PATH="$HOME/Android/Sdk/platform-tools:$PATH"
+
+# Ruby rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+
+# Add Emacs Location to the `$PATH`
+export PATH="$HOME/.emacs.d/bin:$PATH"
+
+# Deno path
+export PATH="$DENO_INSTALL/bin:$PATH"

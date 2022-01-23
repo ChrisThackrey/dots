@@ -1,0 +1,323 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+format = """
+${custom.tztime}\
+${custom.uptime}\
+$cmd_duration\
+$env_var\
+$time\
+$jobs\
+$line_break\
+$status\
+$username\
+$hostname\
+$shlvl\
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$cmake\
+$nodejs\
+$perl\
+$battery\
+$python\
+$ruby\
+$rust\
+$terraform\
+$vagrant\
+$nix_shell\
+$conda\
+$lua\
+$aws\
+$line_break\
+$character"""
+
+scan_timeout = 30 # wait 30ms for Starship to CWD files
+command_timeout = 200
+
+[custom.bash]
+command = "echo 🚀"
+when = '[ "$STARSHIP_SHELL" == "bash" ]'
+disabled = false
+
+# Indicates when in fish shell.
+[custom.fish]
+command = "echo 🐠"
+when = 'test "$STARSHIP_SHELL" = "fish"'
+disabled = false
+
+[character] # The name of the module we are configuring is "character"
+success_symbol = "   [λ](white)"
+error_symbol = "   [λ](bold bright-red)"
+disabled = false
+
+[directory]
+truncation_length = 100
+truncate_to_repo = false
+style = "bright-cyan"
+format = "[$path]($style)[$read_only]($read_only_style) "
+disabled = false
+
+[cmd_duration]
+min_time = 1000                     # Show command duration over 10,000 milliseconds (=10 sec)
+format = '[⏱ $duration](dimmed blue)'
+show_milliseconds = true
+min_time_to_notify = -1
+disabled = false
+
+[custom.tztime]
+command = 'date +"%l:%M%p"'
+when = "true"
+format = ' [\[$symbol($output)\] ](bright-black)'
+disabled = false
+
+[status]
+format = '[\[$status - $common_meaning\]](green)'
+disabled = false
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+disabled = false
+
+[git_branch]
+format = '\[[$symbol$branch]($style)\]'
+disabled = false
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style)'
+disabled = false
+
+[env_var]
+variable = "0"
+disabled = false
+
+[aws]
+format = '\[AWS: [$profile/($region)]($style)\]'
+# format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+symbol = ''
+style = 'bold white'
+disabled = false
+
+[username]
+style_user = "bold dimmed blue"
+show_always = false
+style_root = "blue bold"
+format = "user: [$user]($style) "
+disabled = false
+
+[hostname]
+ssh_only = false
+format = "<[$hostname]($style)>"
+trim_at = "-"
+style = "bold dimmed white"
+disabled = true
+
+[jobs]
+symbol = "+ "
+threshold = 4
+format = "background [$symbol$number]($style) "
+disabled = false
+
+[cmake]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[conda]
+format = '\[[$symbol$environment]($style)\]'
+disabled = true
+
+[crystal]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[dart]
+format = '\[[$symbol($version)]($style)\]'
+disabled = false
+
+[deno]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[docker_context]
+format = '\[[$symbol$context]($style)\]'
+disabled = true
+
+[dotnet]
+format = '\[[$symbol($version)(🎯 $tfm)]($style)\]'
+disabled = true
+
+[elixir]
+format = '\[[$symbol($version \(OTP $otp_version\))]($style)\]'
+disabled = true
+
+[elm]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[gcloud]
+format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
+disabled = true
+
+[golang]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[helm]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[hg_branch]
+format = '\[[$symbol$branch]($style)\]'
+disabled = true
+
+[kotlin]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[kubernetes]
+format = '\[[$symbol$context( \($namespace\))]($style)\]'
+disabled = true
+# [kubernetes.context_aliases]
+# "dev.local.cluster.k8s" = "dev"
+
+[lua]
+format = '\[[$symbol($version)]($style)\]'
+disabled = false
+
+[nodejs]
+format = '\[[$symbol($version)]($style)\]'
+disabled = false
+
+[perl]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[php]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[python]
+format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
+style = "bold green"
+python_binary = ["./venv/bin/python", "python3", "python", "python2"]
+disabled = true
+
+[ruby]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[rust]
+format = '\[[$symbol($version)]($style)\]'
+style = "bold red"
+disabled = false
+
+[scala]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[swift]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[terraform]
+format = '\[[$symbol$workspace]($style)\]'
+disabled = true
+
+[vagrant]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[vlang]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+[zig]
+format = '\[[$symbol($version)]($style)\]'
+disabled = true
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+[time]
+disabled = true
+format = '[\[ $time \]]($style) '
+# format = '[\[$time\]](green) '
+# time_format = "%a %b %d %Y %l:%M%p (%z)"
+
+[memory_usage]
+format = "$symbol[${ram}( | ${swap})]($style) "
+threshold = 70
+style = "bold italic dimmed white"
+disabled = true
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡️"
+discharging_symbol = "💀"
+disabled = true
+
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+threshold = 10
+style = "bold italic red"
+disabled = true
+
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+threshold = 30
+style = "bold italic yellow"
+disabled = true
+
+[[battery.display]]
+threshold = 100
+style = "bold italic green"
+disabled = true
+
+#### Disabled modules ####
+# add these back to format if you want them:
+# $time\
+# $hg_branch\
+# $dart\
+# $dotnet\
+# $elixir\
+# $elm\
+# $erlang\
+# $golang\
+# $helm\
+# $java\
+# $julia\
+# $kotlin\
+# $nim\
+# $ocaml\
+# $php\
+# $purescript\
+# $swift\
+# $zig\
+# $memory_usage\
+# $gcloud\
+# $openstack\
+# $crystal\
+# $lua\
+# $jobs\
+# $battery\
+
+[erlang]
+disabled = true
+[java]
+disabled = true
+[julia]
+disabled = true
+[nim]
+disabled = true
+[ocaml]
+disabled = true
+[purescript]
+disabled = true
+[openstack]
+disabled = true
