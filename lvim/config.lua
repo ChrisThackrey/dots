@@ -1,31 +1,28 @@
 --[[
 lvim is the global options object
 ]]
--- local colors = require("nightfox.colors").load("duskfox")
 
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.transparent_window = true
 lvim.line_wrap_cursor_movement = true
--- "onedarker", "darkplus"
--- vim.cmd("source /home/thacken/.config/lvim/dracula_pro/autoload/dracula_pro.vim")
--- vim.cmd("source /home/thacken/.config/lvim/dracula_pro/colors/dracula_pro_van_helsing.vim")
--- 
--- vim.cmd("source /home/thacken/.nvimrc")
-
--- vim.cmd("colorscheme dracula_pro")
-lvim.colorscheme = "nightfly"
+lvim.colorscheme = "nightfox"
 lvim.leader = "space"
+
+-- Sidebar like windows like NvimTree get a darker background
+vim.g.tokyonight_dark_sidebar = true
+-- Float windows like the lsp diagnostics windows get a darker background
+vim.g.tokyonight_dark_float = true
+-- Enable this to disable setting the background color
+vim.g.tokyonight_transparent = true
+-- Sidebar like windows like NvimTree get a transparent background
+vim.g.tokyonight_transparent_sidebar = true
 
 lvim.lsp.automatic_servers_installation = true
 
 -- Plenty of vim addons execute fish-incompatible shellscript, so setting it to /bin/sh is typically better
-if vim.fn.executable("/usr/local/bin/bash") then
-	vim.o.shell = "/usr/local/bin/bash"
-end
-
-if vim.fn.executable("/usr/bin/fish") then
-	vim.o.shell = "/usr/bin/fish"
+if vim.fn.executable("/usr/bin/bash") then
+	vim.o.shell = "/usr/bin/bash"
 end
 
 vim.g.transparent_background = true
@@ -35,7 +32,7 @@ vim.g.italic_functions = false
 vim.g.italic_variables = false
 
 -- christianchiarulli/nvcode-color-schemes.vim
-vim.g.nvcode_termcolors = 256
+-- vim.g.nvcode_termcolors = 256
 
 vim.g.lightspeed_enable_highlight = 1
 
@@ -84,6 +81,9 @@ vim.g.rust_clip_command = "xclip -selection clipboard"
 vim.g.svelte_preprocessor_tags = { { "name=postcss", "tag=style", "as=scss" } }
 vim.g.svelte_preprocessors = { "typescript", "scss", "postcss" }
 
+-- Force writing the current buffer by calling sudo
+vim.cmd("cmap w!! w !sudo tee % >/dev/null")
+
 -- KEYMAPPINGS --
 -- [view all the defaults by pressing <leader>Lk]
 --
@@ -98,6 +98,33 @@ vim.g.svelte_preprocessors = { "typescript", "scss", "postcss" }
 --
 -- NORMAL --
 -- edit a default keymapping
+-- vim.cmd "nnoremap <leader><leader> <c-^>"
+-- vim.cmd([[
+
+-- ]])
+
+vim.cmd([[
+  fun! Togglequotes()
+    if (strcharpart(strpart(getline("."), col(".") - 1), 0, 1) == '"')
+      normal cs"'
+    elseif (strcharpart(strpart(getline("."), col(".") - 1), 0, 1) == "'")
+      normal cs'"hl
+    end
+  endfun
+  nnoremap <leader>' :call Togglequotes()<CR>
+]])
+
+-- vim.api.nvim_set_keymap("n", "<leader>'", "<ESC>A;<ESC>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Tab>", ">>_", { noremap = true })
+vim.api.nvim_set_keymap("n", "<S-Tab>", "<<_", { noremap = true })
+-- vim.api.nvim_set_keymap("v", ":", ";", { noremap = true })
+-- vim.api.nvim_set_keymap("n", ":", ";", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("v", ":", ";", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("x", ":", ";", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", ";", ":", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("v", ";", ":", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("x", ";", ":", { noremap = true, silent = true })
+lvim.keys.normal_mode["<leader><leader>"] = "<c-^>"
 lvim.keys.normal_mode["<C-q>"] = ":q<CR>"
 lvim.keys.normal_mode["<Esc>"] = "$"
 lvim.keys.normal_mode["d"] = '"_d'
@@ -153,25 +180,16 @@ vim.api.nvim_set_keymap("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent
 -- Copy full line(s) down
 lvim.keys.normal_mode["<leader>j"] = "yyp"
 -- Copy full line(s) up
-lvim.keys.normal_mode["<leader>k"] = "yyP"
+lvim.keys.normal_mode["<leader>k"] = "yyPe"
 -- Toggle Ranger file explorer plugin
 lvim.keys.normal_mode["<leader>a"] = ":RnvimrToggle<CR>"
--- CosmicUI rename function
-lvim.keys.normal_mode["gr"] = "<cmd>lua require('cosmic-ui').rename()<CR>"
--- CosmicUI code actions
-lvim.keys.normal_mode["<leader>ga"] = "<cmd>lua require('cosmic-ui').code_actions()<CR>"
--- LSPSaga
--- lvim.keys.normal_mode["gh"] = "<cmd>:Lspsaga lsp_finder<CR>"
--- lvim.keys.normal_mode["gp"] = "<cmd>:Lspsaga preview_definition<CR>"
 -- nvim-select-multi-line
 lvim.keys.normal_mode["<leader>v"] = ":call sml#mode_on()<CR>"
 lvim.keys.normal_mode["<leader>V"] = ":call sml#mode_off()<CR>"
 -- vim-visual-multi
 lvim.keys.normal_mode["<C-J>"] = ":call vm#commands#add_cursor_down(1, 1)<CR>"
 lvim.keys.normal_mode["<C-K>"] = ":call vm#commands#add_cursor_up(1, 1)<CR>"
--- NNN File Explorer / Picker
-vim.api.nvim_set_keymap("n", "<C-a>n", "<cmd>NnnExplorer %:p:h<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-a>p", "<cmd>NnnPicker<CR>", { noremap = true, silent = true })
+
 -- Clear search highlighting & clear the minimap highlights
 vim.api.nvim_set_keymap(
 	"n",
@@ -291,13 +309,6 @@ vim.api.nvim_set_keymap("v", ">", ">gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "<A-j>", ":m .+1<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "<A-k>", ":m .-2<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "p", "_dP", { noremap = true, silent = true })
--- CosmicUI code actions
-vim.api.nvim_set_keymap(
-	"v",
-	"<leader>ga",
-	"<cmd>lua require('cosmic-ui').range_code_actions()<CR>",
-	{ noremap = true, silent = true }
-)
 -- Vim-Easy-Align
 -- Start EasyAlign in visual mode (e.g. vipga)
 vim.api.nvim_set_keymap("v", "ga", "<Plug>(EasyAlign)<CR>", { noremap = true, silent = true })
@@ -332,23 +343,8 @@ vim.api.nvim_set_keymap(
 -- vim.api.nvim_set_keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", { silent = true })
 -- vim.api.nvim_set_keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", { silent = true })
 -- NNN File Explorer / Picker
-vim.api.nvim_set_keymap("t", "<C-A-n>", "<cmd>NnnExplorer<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("t", "<C-A-p>", "<cmd>NnnPicker<CR>", { noremap = true, silent = true })
-
--- Renamer Plugin -- [https://github.com/filipdutescu/renamer.nvim]
-vim.api.nvim_set_keymap("i", "<F2>", '<cmd>lua require("renamer").rename()<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader>rn",
-	'<cmd>lua require("renamer").rename()<cr>',
-	{ noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-	"v",
-	"<leader>rn",
-	'<cmd>lua require("renamer").rename()<cr>',
-	{ noremap = true, silent = true }
-)
+-- vim.api.nvim_set_keymap("t", "<C-A-n>", "<cmd>NnnExplorer<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("t", "<C-A-p>", "<cmd>NnnPicker<CR>", { noremap = true, silent = true })
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -605,7 +601,9 @@ lvim.builtin.treesitter.autotag.enable = true
 -- Generic LSP settings
 --
 -- VIM Defaults
-vim.o.lazyredraw = true -- Don't redraw while typing macros
+vim.opt.confirm = true
+vim.opt.autowrite = false
+-- vim.o.lazyredraw = true -- Don't redraw while typing macros
 vim.opt.termguicolors = true -- Use terminal colors
 -- vim.bo.textwidth  = 80 -- 80 character limit
 vim.opt.signcolumn = "yes"
@@ -633,6 +631,7 @@ vim.opt.hlsearch = true -- highlight all matches on previous search pattern
 vim.o.ignorecase = true -- ignore case in search patterns
 vim.opt.mouse = "a" -- allow the mouse to be used in neovim
 vim.opt.pumheight = 10 -- pop up menu height (default is 10)
+vim.opt.updatetime = 100 -- update time for autocommand
 vim.opt.infercase = true
 vim.o.incsearch = true -- search for the next match
 vim.opt.grepformat = "%f:%l:%c:%m"
@@ -659,9 +658,9 @@ vim.opt.numberwidth = 2 -- set number column width to 2 {default 4}
 vim.opt.scrolloff = 4 -- is one of my fav
 vim.opt.sidescrolloff = 2
 vim.opt.backspace = "indent,eol,start"
-vim.opt.history = 10000
+vim.opt.history = 6000
 vim.opt.backupskip = "/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim"
-vim.opt.synmaxcol = 4096
+vim.opt.synmaxcol = 2048
 vim.opt.endofline = false
 vim.opt.more = true
 -- Message popup is slightly transparent.
@@ -674,7 +673,7 @@ vim.cmd("set listchars=tab:¤‒,trail:§,extends:…,precedes:…,nbsp:‡")
 -- vim.cmd("set listchars=eol:§,tab:¤›,trail:∙,extends:»,precedes:«,nbsp:‡")
 -- vim.cmd("set listchars=eol:§,tab:→→,trail:■,extends:…,precedes:…,nbsp:‡")
 -- vim.cmd("set listchars=eol:§,tab:■■,trail:■,extends:❯,precedes:❮,nbsp:‡")
--- vim.opt.matchpairs = { '(:)', '{:}', '[:]', '<:>' }
+vim.opt.matchpairs = { "(:)", "{:}", "[:]", "<:>" }
 -- Set hard wrapping guide.
 -- vim.o.colorcolumn = '100'
 -- Diff options.
@@ -683,22 +682,19 @@ vim.o.diffopt = "internal,filler,vertical,algorithm:patience"
 vim.g.javascript_plugin_jsdoc = 1
 vim.opt.wildignore:append("*/node_modules/*,*/vendor/*,*/venv/*,*/.venv/*,*/target/*,*/cache/*,*/tmp/*")
 vim.opt.errorformat:append("%f|%l col %c|%m")
-vim.b.show_virtual_text = true
 
 -- Additional Plugins  (disabled: [~/.config/lvim/plugin/disabled.lua])
 lvim.plugins = {
 	-- [https://github.com/LunarVim/Colorschemes]
-	{
-		"lunarvim/colorschemes",
-		branch = "master",
-	},
+	-- {
+	-- 	"lunarvim/colorschemes",
+	-- 	branch = "master",
+	-- },
 	-- [https://github.com/folke/tokyonight.nvim]
 	{
 		"folke/tokyonight.nvim",
 		branch = "main",
-		requires = {
-			"nvim-treesitter/nvim-treesitter",
-		},
+		requires = { { "nvim-lua/plenary.nvim" }, { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
 		config = function()
 			-- local colors = require("tokyonight").colors
 			vim.g.tokyonight_style = "storm" -- "storm", "night", "day"
@@ -712,93 +708,73 @@ lvim.plugins = {
 			vim.g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer" }
 			-- Change the "hint" color to the "orange" color, and make the "error" color bright red
 			-- vim.g.tokyonight_colors = { hint = colors.yellow, error = colors.red }
-			-- Sidebar like windows like NvimTree get a darker background
-			vim.g.tokyonight_dark_sidebar = true
-			-- Float windows like the lsp diagnostics windows get a darker background
-			vim.g.tokyonight_dark_float = true
-			-- Enable this to disable setting the background color
-			vim.g.tokyonight_transparent = true
-			-- Sidebar like windows like NvimTree get a transparent background
-			vim.g.tokyonight_transparent_sidebar = true
 		end,
 	},
 	-- [https://github.com/EdenEast/nightfox.nvim]
-	-- {
-	-- 	"EdenEast/nightfox.nvim",
-	-- 	branch = "main",
-	-- 	requires = {
-	-- 		"nvim-treesitter/nvim-treesitter",
-	-- 	},
-	-- 	config = function()
-	-- 		local nightfox = require("nightfox")
-	-- 		nightfox.setup({
-	-- 			-- fox = "nightfox", -- nightfox, dayfox, duskfox, nordfox, dawnfox
-	-- 			transparent = true, -- Disable setting the background color
-	-- 			alt_nc = true, -- Non current window bg to alt color see `hl-NormalNC`
-	-- 			terminal_colors = false, -- Configure the colors used when opening :terminal
-	-- 			styles = {
-	-- 				comments = "nocombine", -- change style of comments to be italic
-	-- 				keywords = "nocombine", -- change style of keywords to be bold
-	-- 				functions = "bold,nocombine",
-	-- 				strings = "nocombine", -- Style that is applied to strings: see `highlight-args` for options
-	-- 				variables = "nocombine",
-	-- 			},
-	-- 			inverse = {
-	-- 				match_paren = false, -- Enable/Disable inverse highlighting for match parens
-	-- 				visual = false, -- Enable/Disable inverse highlighting for visual selection
-	-- 				search = false, -- Enable/Disable inverse highlights for search highlights
-	-- 			},
-	-- 			-- colors = {
-	-- 			-- red = "#FF000", -- Override the red color for MAX POWER
-	-- 			-- },
-	-- 			-- hlgroups = {
-	-- 			-- TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
-	-- 			-- LspCodeLens = { style = "italic" },
-	-- 			-- },
-	-- 		})
-	-- 		-- Load the configuration set above and apply the colorscheme
-	-- 		nightfox.load()
-	-- 	end,
-	-- },
+	{
+		"EdenEast/nightfox.nvim",
+		branch = "main",
+		requires = { { "nvim-lua/plenary.nvim" }, { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
+		config = function()
+			local nightfox = require("nightfox")
+			nightfox.setup({
+				-- fox = "nightfox", -- nightfox, dayfox, duskfox, nordfox, dawnfox
+				transparent = true, -- Disable setting the background color
+				alt_nc = true, -- Non current window bg to alt color see `hl-NormalNC`
+				terminal_colors = false, -- Configure the colors used when opening :terminal
+				styles = {
+					comments = "nocombine", -- change style of comments to be italic
+					keywords = "nocombine", -- change style of keywords to be bold
+					functions = "bold,nocombine",
+					strings = "nocombine", -- Style that is applied to strings: see `highlight-args` for options
+					variables = "nocombine",
+				},
+				inverse = {
+					match_paren = false, -- Enable/Disable inverse highlighting for match parens
+					visual = false, -- Enable/Disable inverse highlighting for visual selection
+					search = false, -- Enable/Disable inverse highlights for search highlights
+				},
+				-- colors = {
+				-- red = "#FF000", -- Override the red color for MAX POWER
+				-- },
+				-- hlgroups = {
+				-- TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
+				-- LspCodeLens = { style = "italic" },
+				-- },
+			})
+			-- Load the configuration set above and apply the colorscheme
+			nightfox.load()
+		end,
+	},
 	-- [https://github.com/liuchengxu/space-vim-theme]
 	-- {
 	-- 	"liuchengxu/space-vim-theme",
 	-- 	branch = "master",
 	-- },
 	-- [https://github.com/dracula/vim]
-	{
-		"dracula/vim",
-		as = "dracula",
-		branch = "master",
-		-- config = function()
-		-- 	require("dracula_pro")
-		-- end,
-	},
+	-- {
+	-- 	"dracula/vim",
+	-- 	as = "dracula",
+	-- 	branch = "master",
+	-- 	-- config = function()
+	-- 	-- 	require("dracula_pro")
+	-- 	-- end,
+	-- },
 	-- SpaceDuck Theme  [https://github.com/bluz71/vim-nightfly-guicolors]
-	{
-		"bluz71/vim-nightfly-guicolors",
-		branch = "master",
-	},
+	-- {
+	-- 	"bluz71/vim-nightfly-guicolors",
+	-- 	branch = "master",
+	-- },
 	-- [https://github.com/bluz71/vim-moonfly-colors]
-	{
-		"bluz71/vim-moonfly-colors",
-		branch = "master",
-	},
-	-- Distraction-free coding  [https://github.com/folke/zen-mode.nvim]
-	{
-		"folke/zen-mode.nvim",
-		branch = "main",
-		wants = { { "folke/twilight.nvim", opt = true } },
-		cmd = "ZenMode",
-		config = function()
-			require("zen-mode").setup()
-		end,
-	},
+	-- {
+	-- 	"bluz71/vim-moonfly-colors",
+	-- 	branch = "master",
+	-- },
 	-- dims inactive portions of the code you're editing  [https://github.com/folke/twilight.nvim]
 	{
 		"folke/twilight.nvim",
 		branch = "main",
-		wants = { "nvim-treesitter/nvim-treesitter" },
+		requires = { { "nvim-treesitter/nvim-treesitter" }, { "EdenEast/nightfox.nvim" } },
 		cmd = {
 			"Twilight", -- toggle twilight
 			"TwilightEnable", -- enable twilight
@@ -827,15 +803,42 @@ lvim.plugins = {
 			})
 		end,
 	},
+	-- Distraction-free coding  [https://github.com/folke/zen-mode.nvim]
+	{
+		"folke/zen-mode.nvim",
+		branch = "main",
+		requires = {
+			{ "folke/twilight.nvim", opt = true },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		cmd = "ZenMode",
+		config = function()
+			require("zen-mode").setup()
+		end,
+	},
 	-- [https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils]
 	-- [https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#denols]
 	-- require'lspconfig'.denols.setup{}
 	{
 		"jose-elias-alvarez/nvim-lsp-ts-utils",
 		branch = "main",
-		wants = { { "nvim-lua/plenary.nvim" }, { "neovim/nvim-lspconfig" } },
-		-- after = {{"nvim-lua/plenary.nvim"}, {"neovim/nvim-lspconfig"}},
-		-- ft = {"javascript", "javascriptreact", "svelte", "typescript", "typescriptreact"},
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		-- ft = {
+		-- 	"astro",
+		-- 	"astro-markdown",
+		-- 	"javascript",
+		-- 	"javascriptreact",
+		-- 	"svelte",
+		-- 	"typescript",
+		-- 	"typescriptreact",
+		-- 	"vue",
+		-- },
 		config = function()
 			local null_ls = require("null-ls")
 			-- local lspconfig = require("lspconfig")
@@ -855,75 +858,109 @@ lvim.plugins = {
 					}),
 				},
 			})
-			-- Needed for inlayHints. Merge this table with your settings or copy
-			-- it from the source if you want to add your own init_options.
-			-- lspconfig.tsserver.setup.init_options = require("nvim-lsp-ts-utils").init_options
-			-- lspconfig.tsserver.setup.on_attach = function(client, bufnr)
-			-- lspconfig.tsserver.setup.on_attach = function(client)
-			--   local ts_utils = require("nvim-lsp-ts-utils")
-			--   -- defaults
-			--   ts_utils.setup({
-			--     debug = false,
-			--     disable_commands = false,
-			--     enable_import_on_completion = false,
-			--     -- import all
-			--     import_all_timeout = 5000, -- ms
-			--     -- lower numbers = higher priority
-			--     import_all_priorities = {
-			--       same_file = 1, -- add to existing import statement
-			--       local_files = 2, -- git files or files with relative path markers
-			--       buffer_content = 3, -- loaded buffer content
-			--       buffers = 4, -- loaded buffer names
-			--     },
-			--     import_all_scan_buffers = 100,
-			--     import_all_select_source = false,
-			--     -- if false will avoid organizing imports
-			--     always_organize_imports = true,
-			--     -- filter diagnostics
-			--     filter_out_diagnostics_by_severity = {},
-			--     filter_out_diagnostics_by_code = {},
-			--     -- inlay hints
-			--     auto_inlay_hints = true,
-			--     inlay_hints_highlight = "Comment",
-			--     inlay_hints_priority = 200, -- priority of the hint extmarks
-			--     inlay_hints_throttle = 150, -- throttle the inlay hint request
-			--     inlay_hints_format = { -- format options for individual hint kind
-			--       Type = {},
-			--       Parameter = {},
-			--       Enum = {},
-			--       -- Example format customization for `Type` kind:
-			--       -- Type = {
-			--       --     highlight = "Comment",
-			--       --     text = function(text)
-			--       --         return "->" .. text:sub(2)
-			--       --     end,
-			--       -- },
-			--     },
-			--     -- update imports on file move
-			--     update_imports_on_move = false,
-			--     require_confirmation_on_move = false,
-			--     watch_dir = nil,
-			--   })
-			--    -- required to fix code action ranges and filter diagnostics
-			--   ts_utils.setup_client(client)
-			--   -- no default maps, so you may want to define some here
-			--   -- local opts = { silent = true }
-			--   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
-			--   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
-			--   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
-			-- end
 		end,
+	},
+	-- remaps the . command in a way that plugins can tap into it  [https://github.com/tpope/vim-repeat]
+	-- add the following command at the end of your map functions
+	-- silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+	{
+		"tpope/vim-repeat",
+		branch = "master",
+		requires = { "nvim-treesitter/nvim-treesitter" },
 	},
 	-- Visual-Studio-Code-like renaming UI for Neovim, writen in Lua  [https://github.com/filipdutescu/renamer.nvim]
 	{
 		"filipdutescu/renamer.nvim",
 		branch = "master",
-		wants = { { "nvim-lua/plenary.nvim" } },
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		config = function()
+			local mappings_utils = require("renamer.mappings.utils")
+			require("renamer").setup({
+				-- The popup title, shown if `border` is true
+				title = "Rename",
+				-- The padding around the popup content
+				padding = {
+					top = 0,
+					left = 0,
+					bottom = 0,
+					right = 0,
+				},
+				-- The minimum width of the popup
+				min_width = 20,
+				-- The maximum width of the popup
+				max_width = 60,
+				-- Whether or not to shown a border around the popup
+				border = true,
+				-- The characters which make up the border
+				border_chars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+				-- Whether or not to highlight the current word references through LSP
+				show_refs = true,
+				-- Whether or not to add resulting changes to the quickfix list
+				with_qf_list = true,
+				-- Whether or not to enter the new name through the UI or Neovim's `input`
+				-- prompt
+				with_popup = true,
+				-- The keymaps available while in the `renamer` buffer. The example below
+				-- overrides the default values, but you can add others as well.
+				mappings = {
+					["<c-i>"] = mappings_utils.set_cursor_to_start,
+					["<c-a>"] = mappings_utils.set_cursor_to_end,
+					["<c-e>"] = mappings_utils.set_cursor_to_word_end,
+					["<c-b>"] = mappings_utils.set_cursor_to_word_start,
+					["<c-c>"] = mappings_utils.clear_line,
+					["<c-u>"] = mappings_utils.undo,
+					["<c-r>"] = mappings_utils.redo,
+				},
+				-- Custom handler to be run after successfully renaming the word. Receives
+				-- the LSP 'textDocument/rename' raw response as its parameter.
+				handler = nil,
+			})
+			vim.api.nvim_set_keymap(
+				"i",
+				"<F2>",
+				'<cmd>lua require("renamer").rename({empty = true})<cr>',
+				{ noremap = true, silent = true }
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"<leader>rn",
+				'<cmd>lua require("renamer").rename({empty = true})<cr>',
+				{ noremap = true, silent = true }
+			)
+			vim.api.nvim_set_keymap(
+				"v",
+				"<leader>rn",
+				'<cmd>lua require("renamer").rename({empty = true})<cr>',
+				{ noremap = true, silent = true }
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"<F2>",
+				'<cmd>lua require("renamer").rename({empty = true})<cr>',
+				{ noremap = true, silent = true }
+			)
+			vim.api.nvim_set_keymap(
+				"v",
+				"<F2>",
+				'<cmd>lua require("renamer").rename({empty = true})<cr>',
+				{ noremap = true, silent = true }
+			)
+		end,
 	},
 	-- View man pages in vim. Grep for the man pages. [https://github.com/vim-utils/vim-man]
 	{
 		"vim-utils/vim-man",
 		branch = "master",
+		requires = {
+			{ "nvim-lua/plenary.nvim", opt = true },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 	},
 	-- [https://github.com/mbbill/undotree]
 	-- visualizes undo history and makes it easier to browse and switch between different undo branches
@@ -931,6 +968,8 @@ lvim.plugins = {
 	{
 		"mbbill/undotree",
 		branch = "master",
+		requires = { { "nvim-treesitter/nvim-treesitter" }, { "EdenEast/nightfox.nvim" } },
+		cmd = "UndotreeToggle",
 	},
 	--[[ nvim-treesitter-textsubjects ]]
 	-- Location and syntax aware text objects  [https://github.com/RRethy/nvim-treesitter-textsubjects]
@@ -938,7 +977,11 @@ lvim.plugins = {
 	{
 		"RRethy/nvim-treesitter-textsubjects",
 		branch = "master",
-		wants = { "nvim-treesitter/nvim-treesitter" },
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "jose-elias-alvarez/nvim-lsp-ts-utils" },
+		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				textsubjects = {
@@ -956,56 +999,87 @@ lvim.plugins = {
 	{
 		"kana/vim-textobj-user",
 		branch = "master",
-		wants = { "nvim-treesitter/nvim-treesitter" },
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
 	},
 	-- syntax highlighting and indentation for Svelte 3 components  [https://github.com/evanleck/vim-svelte]
 	{
 		"evanleck/vim-svelte",
 		branch = "main",
-		requires = "pangloss/vim-javascript",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-telescope/telescope.nvim" },
+			{ "sheerun/vim-polyglot" },
+			{ "pangloss/vim-javascript" },
+			{ "jose-elias-alvarez/nvim-lsp-ts-utils" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		ft = {
+			"svelte",
+			"TelescopePrompt",
+			"spectre_panel",
+		},
 	},
 	-- Astro language support  [https://github.com/rajasegar/vim-astro]
-	-- {
-	-- 	"rajasegar/vim-astro",
-	-- 	branch = "main",
-	-- 	requires = { "pangloss/vim-javascript" },
-	-- 	events = { "BufRead", "BufNewFile", "BufWinEnter" },
-	-- 	ft = { "astro" },
-	-- 	config = function()
-	-- 		vim.g.astro_indent_script = 0
-	-- 		vim.g.astro_indent_style = 0
-	-- 		-- vim-javascript global options
-	-- 		vim.g.javascript_plugin_jsdoc = 1
-	-- 		vim.g.javascript_plugin_flow = 1
-	-- 		vim.g.conceallevel = 1
-	-- 		vim.g.javascript_conceal_function = "ƒ"
-	-- 		vim.g.javascript_conceal_null = "ø"
-	-- 		vim.g.javascript_conceal_this = "@"
-	-- 		vim.g.javascript_conceal_return = "⇚"
-	-- 		vim.g.javascript_conceal_undefined = "¿"
-	-- 		vim.g.javascript_conceal_NaN = "ℕ"
-	-- 		vim.g.javascript_conceal_prototype = "¶"
-	-- 		vim.g.javascript_conceal_static = "•"
-	-- 		vim.g.javascript_conceal_super = "Ω"
-	-- 		vim.g.javascript_conceal_arrow_function = "⇒"
-	-- 		vim.g.javascript_conceal_noarg_arrow_function = "🞅"
-	-- 		vim.g.javascript_conceal_underscore_arrow_function = "🞅"
-	-- 	end,
-	-- },
+	{
+		"rajasegar/vim-astro",
+		branch = "main",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-telescope/telescope.nvim" },
+			{ "sheerun/vim-polyglot" },
+			{ "pangloss/vim-javascript" },
+			{ "jose-elias-alvarez/nvim-lsp-ts-utils" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		-- events = { "BufRead", "BufNewFile", "BufWinEnter" },
+		ft = { "astro", "astro-markdown", "TelescopePrompt", "spectre_panel" },
+		config = function()
+			vim.g.astro_indent_script = 0
+			vim.g.astro_indent_style = 0
+			-- vim-javascript global options
+			vim.g.javascript_plugin_jsdoc = 1
+			vim.g.javascript_plugin_flow = 1
+			-- vim.g.conceallevel = 1
+			vim.g.javascript_conceal_function = "ƒ"
+			vim.g.javascript_conceal_null = "ø"
+			vim.g.javascript_conceal_this = "@"
+			vim.g.javascript_conceal_return = "⇚"
+			vim.g.javascript_conceal_undefined = "¿"
+			vim.g.javascript_conceal_NaN = "ℕ"
+			vim.g.javascript_conceal_prototype = "¶"
+			vim.g.javascript_conceal_static = "•"
+			vim.g.javascript_conceal_super = "Ω"
+			vim.g.javascript_conceal_arrow_function = "⇒"
+			vim.g.javascript_conceal_noarg_arrow_function = "🞅"
+			vim.g.javascript_conceal_underscore_arrow_function = "🞅"
+		end,
+	},
 	-- provides for motions based on indent depths or levels  [https://github.com/jeetsukumaran/vim-indentwise]
 	{
 		"jeetsukumaran/vim-indentwise",
 		branch = "master",
 	},
+	requires = {
+		{ "nvim-treesitter/nvim-treesitter" },
+	},
 	-- adds various text objects to give you more targets to operate on  [https://github.com/wellle/targets.vim]
 	{
 		"wellle/targets.vim",
 		branch = "master",
+		requires = {
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
 	},
 	-- [https://github.com/abecodes/tabout.nvim]
 	{
 		"abecodes/tabout.nvim",
 		branch = "master",
+		requires = { { "hrsh7th/nvim-cmp" }, { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } }, -- if a completion plugin is using tabs load it before
+		event = { "InsertEnter", "BufRead", "BufReadPost" },
 		config = function()
 			require("tabout").setup({
 				tabkey = "<Tab>", -- key to trigger tabout, set to an empty string to disable
@@ -1026,8 +1100,6 @@ lvim.plugins = {
 				exclude = {}, -- tabout will ignore these filetypes
 			})
 		end,
-		wants = { "nvim-treesitter/nvim-treesitter" }, -- or require if not used so far
-		after = { "nvim-cmp" }, -- if a completion plugin is using tabs load it before
 	},
 	-- View Vim marks in the sign column [https://github.com/chentau/marks.nvim]
 	{
@@ -1072,32 +1144,6 @@ lvim.plugins = {
 		"numtostr/FTerm.nvim",
 		branch = "master",
 	},
-	-- File manager for Neovim powered by nnn  [https://github.com/luukvbaal/nnn.nvim]
-	{
-		"luukvbaal/nnn.nvim",
-		branch = "master",
-		config = function()
-			local builtin = require("nnn").builtin
-			require("nnn").setup({
-				picker = {
-					cmd = "tmux new-session nnn -Pp",
-					style = { border = "rounded" },
-					session = "shared",
-				},
-				replace_netrw = "picker",
-				window_nav = "<C-l>",
-				mappings = {
-					{ "<C-t>", builtin.open_in_tab }, -- open file(s) in tab
-					{ "<C-s>", builtin.open_in_split }, -- open file(s) in split
-					{ "<C-v>", builtin.open_in_vsplit }, -- open file(s) in vertical split
-					{ "<C-p>", builtin.open_in_preview }, -- open file in preview split keeping nnn focused
-					{ "<C-y>", builtin.copy_to_clipboard }, -- copy file(s) to clipboard
-					{ "<C-w>", builtin.cd_to_path }, -- cd to file directory
-					{ "<C-e>", builtin.populate_cmdline }, -- populate cmdline (:) with file(s)
-				},
-			})
-		end,
-	},
 	-- [https://github.com/github/copilot.vim]
 	-- {
 	-- 	"github/copilot.vim",
@@ -1108,18 +1154,33 @@ lvim.plugins = {
 	{
 		"Lucklyric/copilot.vim",
 		branch = "feat/cycling-alternate-suggestions",
+		event = { "InsertEnter", "BufRead", "BufReadPost" },
 	},
 	-- VSCode(LSP)'s snippet feature in vim.  [https://github.com/hrsh7th/vim-vsnip/blob/master/README.md#2-setting]
 	{
 		"hrsh7th/vim-vsnip",
 		branch = "master",
-		requires = "hrsh7th/vim-vsnip-integ",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "hrsh7th/nvim-cmp" },
+			{ "hrsh7th/vim-vsnip-integ" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "InsertEnter", "BufRead", "BufReadPost" },
 	},
 	-- nvim-cmp source for vim's cmdline.  [https://github.com/hrsh7th/cmp-cmdline]
 	{
 		"hrsh7th/cmp-cmdline",
 		branch = "main",
-		requires = "hrsh7th/cmp-buffer",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "hrsh7th/nvim-cmp" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "InsertEnter", "BufRead", "BufReadPost" },
 		config = function()
 			require("cmp").setup.cmdline(":", {
 				sources = {
@@ -1144,11 +1205,22 @@ lvim.plugins = {
 	{
 		"unblevable/quick-scope",
 		branch = "master",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 	},
 	-- [https://github.com/norcalli/nvim-colorizer.lua]
 	{
 		"norcalli/nvim-colorizer.lua",
 		branch = "master",
+		event = { "BufWinEnter", "BufRead", "BufReadPost" },
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		config = function()
 			require("colorizer").setup({ "*" }, {
 				RGB = true, -- #RGB hex codes
@@ -1165,11 +1237,13 @@ lvim.plugins = {
 	{
 		"ThePrimeagen/refactoring.nvim",
 		branch = "master",
-		wants = {
+		requires = {
 			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
 			{ "nvim-treesitter/nvim-treesitter" },
 			{ "nvim-telescope/telescope.nvim", opt = true },
 		},
+		-- event = { "InsertEnter", "BufRead", "BufReadPost" },
 		config = function()
 			require("refactoring").setup({
 				-- prompt for return type
@@ -1187,16 +1261,13 @@ lvim.plugins = {
 			require("telescope").load_extension("refactoring")
 		end,
 	},
-	-- [https://github.com/ThePrimeagen/git-worktree.nvim]
-	-- {
-	--     "ThePrimeagen/git-worktree.nvim",
-	--     branch = "master"
-	-- },
 	-- motion plugin based on incremental fuzzy search  [https://github.com/rlane/pounce.nvim]
 	-- No mappings are created by default
 	{
 		"rlane/pounce.nvim",
 		branch = "master",
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" }, { "tpope/vim-repeat" } },
+		-- event = { "BufRead", "BufReadPost" },
 		config = function()
 			require("pounce").setup({
 				accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
@@ -1207,25 +1278,22 @@ lvim.plugins = {
 			vim.cmd("omap gs <cmd>Pounce<CR>") -- 's' is used by vim-surround
 		end,
 	},
-	-- motion jumping plugin [https://github.com/ggandor/lightspeed.nvim]
-	-- {
-	-- 	"ggandor/lightspeed.nvim",
-	-- 	branch = "main",
-	-- 	requires = "tpope/vim-repeat",
-	-- 	event = "BufRead",
-	-- },
 	-- [https://github.com/p00f/nvim-ts-rainbow]
 	{
 		"p00f/nvim-ts-rainbow",
 		branch = "master",
-		requires = "nvim-treesitter/nvim-treesitter",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				rainbow = {
-					enable = true,
+					enable = false,
 					disable = { "astro", "astro-markdown" }, -- list of languages you want to disable the plugin for
 					extended_mode = true,
-					max_file_lines = 10000,
+					max_file_lines = 4000,
 					colors = {
 						"#ebff87",
 						"#da70d6",
@@ -1242,7 +1310,7 @@ lvim.plugins = {
 	{
 		"ThePrimeagen/harpoon",
 		branch = "master",
-		wants = {
+		requires = {
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-telescope/telescope.nvim",
@@ -1252,7 +1320,7 @@ lvim.plugins = {
 	{
 		"nvim-telescope/telescope-media-files.nvim",
 		branch = "master",
-		wants = {
+		requires = {
 			"nvim-lua/popup.nvim",
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
@@ -1265,7 +1333,7 @@ lvim.plugins = {
 	{
 		"sindrets/diffview.nvim",
 		branch = "main",
-		wants = {
+		requires = {
 			{ "nvim-lua/plenary.nvim" },
 			{ "kyazdani42/nvim-web-devicons", opt = true },
 		},
@@ -1283,7 +1351,7 @@ lvim.plugins = {
 	{
 		"TimUntersberger/neogit",
 		branch = "master",
-		wants = "nvim-lua/plenary.nvim",
+		requires = { "nvim-lua/plenary.nvim" },
 		cmd = "Neogit",
 		config = function()
 			require("neogit").setup({ integrations = { diffview = true } })
@@ -1314,7 +1382,8 @@ lvim.plugins = {
 	{
 		"SmiteshP/nvim-gps",
 		branch = "master",
-		requires = { "nvim-treesitter/nvim-treesitter" },
+		-- event = { "BufRead", "BufReadPost" },
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
 		config = function()
 			require("nvim-gps").setup()
 		end,
@@ -1323,11 +1392,13 @@ lvim.plugins = {
 	{
 		"NTBBloodbath/galaxyline.nvim", -- 'CosmicNvim/galaxyline.nvim'
 		branch = "main",
+		requires = {
+			{ "kyazdani42/nvim-web-devicons", opt = true },
+			{ "SmiteshP/nvim-gps" },
+		},
 		config = function()
 			require("cosmic.core.statusline")
 		end,
-		requires = "SmiteshP/nvim-gps",
-		wants = { { "kyazdani42/nvim-web-devicons", opt = true } },
 	},
 	-- EditorConfig plugin for Vim  [https://github.com/editorconfig/editorconfig-vim]
 	-- {
@@ -1341,7 +1412,12 @@ lvim.plugins = {
 	{
 		"stevearc/aerial.nvim",
 		branch = "master",
-		wants = { "nvim-treesitter/nvim-treesitter" },
+		requires = {
+			{ "kyazdani42/nvim-web-devicons", opt = true },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		config = function()
 			require("aerial").setup({
 				on_attach = function(bufnr)
@@ -1362,7 +1438,7 @@ lvim.plugins = {
 	{
 		"theHamsta/nvim-treesitter-pairs",
 		branch = "master",
-		wants = { "nvim-treesitter/nvim-treesitter" },
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				pairs = {
@@ -1390,20 +1466,20 @@ lvim.plugins = {
 	{
 		"junegunn/vim-easy-align",
 		branch = "master",
-		event = "BufReadPost",
+		event = { "BufRead", "BufReadPost" },
 	},
 	-- A git commit browser.  [https://github.com/junegunn/gv.vim]
 	-- :GV to open commit browser
 	{
 		"junegunn/gv.vim",
 		branch = "master",
-		requires = "tpope/vim-fugitive",
+		requires = { "tpope/vim-fugitive" },
 	},
 	-- [https://github.com/sudormrfbin/cheatsheet.nvim]
 	{
 		"sudormrfbin/cheatsheet.nvim",
 		branch = "master",
-		wants = {
+		requires = {
 			{ "nvim-telescope/telescope.nvim" },
 			{ "nvim-lua/popup.nvim" },
 			{ "nvim-lua/plenary.nvim" },
@@ -1433,26 +1509,28 @@ lvim.plugins = {
 	{
 		"VonHeikemen/searchbox.nvim",
 		branch = "main",
-		requires = "MunifTanjim/nui.nvim",
+		requires = { "MunifTanjim/nui.nvim" },
 		config = function()
 			require("searchbox").setup({
 				popup = {
+					enter = true,
+					focusable = true,
 					relative = "win",
 					position = {
-						row = "10%",
-						col = "90%",
+						row = "5%",
+						col = "95%",
 					},
 					size = 30,
 					border = {
 						style = "rounded",
-						highlight = "FloatBorder",
 						text = {
 							top = " Search ",
 							top_align = "left",
 						},
 					},
-					win_options = {
-						winhighlight = "Normal:Normal",
+					buf_options = {
+						modifiable = true,
+						readonly = false,
 					},
 				},
 			})
@@ -1462,7 +1540,7 @@ lvim.plugins = {
 	{
 		"vuki656/package-info.nvim",
 		branch = "master",
-		requires = "MunifTanjim/nui.nvim",
+		requires = { "MunifTanjim/nui.nvim" },
 		config = function()
 			require("package-info").setup()
 		end,
@@ -1472,7 +1550,8 @@ lvim.plugins = {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		branch = "master",
-		event = "BufRead",
+		requires = { { "nvim-treesitter/nvim-treesitter" }, { "EdenEast/nightfox.nvim" } },
+		event = { "BufRead", "BufReadPost" },
 		setup = function()
 			vim.g.indentLine_enabled = 1
 			vim.g.indentLine_char = "┆"
@@ -1496,21 +1575,46 @@ lvim.plugins = {
 	{
 		"tpope/vim-dotenv",
 		branch = "master",
+		requires = { "nvim-treesitter/nvim-treesitter" },
 	},
 	-- mappings for bracket chars "[" "]" [https://github.com/tpope/vim-unimpaired]
 	{
 		"tpope/vim-unimpaired",
 		branch = "master",
+		requires = { "nvim-treesitter/nvim-treesitter" },
 	},
 	-- mappings to delete, change and add surroundings  [https://github.com/tpope/vim-surround]
 	{
 		"tpope/vim-surround",
 		branch = "master",
+		requires = { { "nvim-treesitter/nvim-treesitter" } },
+		-- event = { "BufRead", "BufReadPost" },
+		config = function()
+			vim.g.surround_use_pairs = 1
+		end,
 	},
-	-- enable repeating supported plugin maps with "."  [https://github.com/tpope/vim-repeat]
+	-- Provides key mapping to add/replace/delete/cycle surrounding characters.  [https://github.com/blackCauldron7/surround.nvim]
 	{
-		"tpope/vim-repeat",
+		"blackCauldron7/surround.nvim",
 		branch = "master",
+		requires = { { "nvim-treesitter/nvim-treesitter" } },
+		-- event = { "BufRead", "BufReadPost" },
+		config = function()
+			require("surround").setup({
+				context_offset = 100,
+				load_autogroups = false,
+				mappings_style = "surround",
+				map_insert_mode = true,
+				quotes = { "'", '"', "`" },
+				brackets = { "(", "{", "[" },
+				space_on_closing_char = false,
+				pairs = {
+					nestable = { b = { "(", ")" }, s = { "[", "]" }, B = { "{", "}" }, a = { "<", ">" } },
+					linear = { q = { "'", "'" }, t = { "`", "`" }, d = { '"', '"' } },
+				},
+				prefix = "S",
+			})
+		end,
 	},
 	-- Press <C-G>c in insert mode to toggle a temporary software caps lock, or gC in normal mode
 	-- to toggle a slightly more permanent one.  [https://github.com/tpope/vim-capslock]
@@ -1522,11 +1626,19 @@ lvim.plugins = {
 	{
 		"alvan/vim-closetag",
 		branch = "master",
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
+		event = { "BufRead", "BufReadPost" },
 	},
 	-- Ranger file explorer plugin  [https://github.com/kevinhwang91/rnvimr]
 	{
 		"kevinhwang91/rnvimr",
 		branch = "main",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		cmd = "RnvimrToggle",
 		config = function()
 			vim.g.rnvimr_draw_border = 1
@@ -1559,6 +1671,11 @@ lvim.plugins = {
 	-- Multiple cursors like VSCode  [https://github.com/mg979/vim-visual-multi]
 	{
 		"mg979/vim-visual-multi",
+		branch = "master",
+	},
+	-- Select/yank multiple lines that are not adjacent  [https://github.com/Rasukarusan/nvim-select-multi-line]
+	{
+		"Rasukarusan/nvim-select-multi-line",
 		branch = "master",
 	},
 	-- Smooth scrolling  [https://github.com/karb94/neoscroll.nvim]
@@ -1595,6 +1712,12 @@ lvim.plugins = {
 	{
 		"severin-lemaignan/vim-minimap",
 		branch = "master",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		run = "cargo install --locked code-minimap",
 		cmd = {
 			"Minimap",
@@ -1604,9 +1727,9 @@ lvim.plugins = {
 			"MinimapUpdateHighlight",
 		},
 		config = function()
-			vim.cmd("let g:minimap_width = 10")
-			vim.cmd("let g:minimap_auto_start = 1")
-			vim.cmd("let g:minimap_auto_start_win_enter = 1")
+			vim.g.minimap_width = 10
+			vim.g.minimap_auto_start = 1
+			vim.g.minimap_auto_start_win_enter = 1
 		end,
 	},
 	-- generate a proper documentation skeleton based on certain expressions (mainly functions)
@@ -1614,12 +1737,20 @@ lvim.plugins = {
 	{
 		"kkoomen/vim-doge",
 		branch = "master",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "CursorHold", "BufRead", "BufReadPost" },
 		run = ":call doge#install()",
 	},
 	-- [https://github.com/tpope/vim-commentary]
 	{
 		"tpope/vim-commentary",
 		branch = "master",
+		requires = { { "neovim/nvim-lspconfig" }, { "nvim-treesitter/nvim-treesitter" } },
 	},
 	-- [https://github.com/RRethy/vim-illuminate]
 	{
@@ -1630,6 +1761,13 @@ lvim.plugins = {
 	{
 		"weilbith/nvim-code-action-menu",
 		branch = "main",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "CursorHold", "BufRead", "BufReadPost" },
 		cmd = "CodeActionMenu",
 	},
 	-- [https://github.com/kosayoda/nvim-lightbulb]
@@ -1637,7 +1775,13 @@ lvim.plugins = {
 	{
 		"nacro90/numb.nvim",
 		branch = "master",
-		event = "BufRead",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		-- event = { "BufRead", "BufReadPost" },
 		config = function()
 			require("numb").setup({
 				show_numbers = true, -- Enable 'number' for the window while peeking
@@ -1660,6 +1804,7 @@ lvim.plugins = {
 		requires = {
 			{ "junegunn/fzf" },
 			{ "junegunn/fzf.vim", opt = true }, -- to enable preview (optional)
+			{ "EdenEast/nightfox.nvim" },
 		},
 		config = function()
 			require("lspfuzzy").setup({
@@ -1686,7 +1831,13 @@ lvim.plugins = {
 	{
 		"kevinhwang91/nvim-bqf",
 		branch = "main",
-		event = { "BufRead", "BufNew" },
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "BufRead", "BufReadPost", "BufNew" },
 		config = function()
 			require("bqf").setup({
 				auto_enable = true,
@@ -1710,75 +1861,17 @@ lvim.plugins = {
 			})
 		end,
 	},
-	-- Select/yank multiple lines that are not adjacent  [https://github.com/Rasukarusan/nvim-select-multi-line]
-	{
-		"Rasukarusan/nvim-select-multi-line",
-		branch = "master",
-	},
-	-- CosmicNvim UI theme + Code Actions + Rename  [https://github.com/CosmicNvim/cosmic-ui]
-	{
-		"CosmicNvim/cosmic-ui",
-		requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-		branch = "main",
-		config = function()
-			require("cosmic-ui").setup({
-				-- default border to use
-				-- 'single', 'double', 'rounded', 'solid', 'shadow'
-				border = "rounded",
-				-- rename popup settings
-				rename = {
-					prompt = "> ",
-					-- same as nui popup options
-					popup_opts = {
-						position = {
-							row = 1,
-							col = 0,
-						},
-						size = {
-							width = 25,
-							height = 2,
-						},
-						relative = "cursor",
-						border = {
-							highlight = "FloatBorder",
-							style = "rounded", -- _G.CosmicUI_user_opts.border (single)
-							text = {
-								top = " Rename ",
-								top_align = "left",
-							},
-						},
-						win_options = {
-							winhighlight = "Normal:Normal",
-						},
-					},
-				},
-				code_actions = {
-					min_width = {},
-					-- same as nui popup options
-					popup_opts = {
-						position = {
-							row = 1,
-							col = 0,
-						},
-						relative = "cursor",
-						border = {
-							highlight = "FloatBorder",
-							style = "rounded", -- _G.CosmicUI_user_opts.border (single)
-							text = {
-								top = "Code Actions",
-								top_align = "center",
-							},
-							padding = { 0, 1 },
-						},
-					},
-				},
-			})
-		end,
-	},
 	-- previewing native LSP's goto definition calls in floating windows  [https://github.com/rmagatti/goto-preview]
 	{
 		"rmagatti/goto-preview",
 		branch = "main",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		-- event = { "BufRead", "BufReadPost" },
 		config = function()
 			require("goto-preview").setup({
 				width = 120, -- Width of the floating window
@@ -1787,12 +1880,9 @@ lvim.plugins = {
 				debug = false, -- Print debug information
 				opacity = nil, -- 0-100 opacity level of the floating window where 100 is fully transparent.
 				post_open_hook = nil, -- A function taking two arguments, a buffer and a window to be ran as a hook.
-				-- You can use "default_mappings = true" setup option
-				-- Or explicitly set keybindings
-				-- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>")
-				-- vim.cmd("nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>")
-				-- vim.cmd("nnoremap gP <cmd>lua require('goto-preview').close_all_win()<CR>")
 			})
+			-- You can use "default_mappings = true" setup option
+			-- Or explicitly set keybindings
 		end,
 	},
 	-- cwd to the project's root directory  [https://github.com/ahmedkhalf/lsp-rooter.nvim]
@@ -1808,7 +1898,13 @@ lvim.plugins = {
 	{
 		"ray-x/lsp_signature.nvim",
 		branch = "master",
-		event = "BufRead",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
+		event = { "CursorHold", "BufRead", "BufReadPost" },
 		config = function()
 			require("lsp_signature").setup()
 		end,
@@ -1817,6 +1913,11 @@ lvim.plugins = {
 	{
 		"simrat39/symbols-outline.nvim",
 		branch = "master",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		cmd = "SymbolsOutline",
 	},
 	-- Preview markdown in the browser  [https://github.com/iamcco/markdown-preview.nvim]
@@ -1835,12 +1936,24 @@ lvim.plugins = {
 	{
 		"rust-lang/rust.vim",
 		branch = "master",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "EdenEast/nightfox.nvim" },
+		},
 		ft = { "rust" },
 	},
 	-- [https://github.com/simrat39/rust-tools.nvim]
 	{
 		"simrat39/rust-tools.nvim",
 		branch = "master",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-telescope/telescope.nvim" },
+			{ "mfussenegger/nvim-dap" },
+		},
 		config = function()
 			require("rust-tools").setup({
 				tools = {
@@ -1879,21 +1992,19 @@ lvim.plugins = {
 			"RustViewCrateGraph",
 			"RustReloadWorkspace",
 		},
-		wants = {
-			"neovim/nvim-lspconfig",
-			"nvim-lua/plenary.nvim",
-			"mfussenegger/nvim-dap",
-		},
 	},
 	-- Build flutter and dart applications in neovim using the native LSP
 	-- [https://github.com/akinsho/flutter-tools.nvim]
 	{
 		"akinsho/flutter-tools.nvim",
 		branch = "main",
-		wants = {
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope.nvim",
-			"mfussenegger/nvim-dap",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-telescope/telescope.nvim" },
+			{ "mfussenegger/nvim-dap" },
+			{ "EdenEast/nightfox.nvim" },
 		},
 		ft = { "dart" },
 		cmd = {
@@ -1919,7 +2030,6 @@ lvim.plugins = {
 	{
 		"ethanholz/nvim-lastplace",
 		branch = "main",
-		event = "BufRead",
 		config = function()
 			require("nvim-lastplace").setup({
 				lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
@@ -1933,57 +2043,6 @@ lvim.plugins = {
 			})
 		end,
 	},
-	-- live edit html, css, and javascript  [https://github.com/turbio/bracey.vim]
-	{
-		"turbio/bracey.vim",
-		branch = "master",
-		cmd = { "Bracey", "BracyStop", "BraceyReload", "BraceyEval" },
-		run = "npm install --prefix server",
-	},
-	-- lightweight support for ruby bundler  [https://github.com/tpope/vim-bundler]
-	{
-		"tpope/vim-bundler",
-		branch = "master",
-		cmd = { "Bundler", "Bopen", "Bsplit", "Btabedit" },
-	},
-	-- edit ruby on rails applications  [https://github.com/tpope/vim-rails]
-	{
-		"tpope/vim-rails",
-		branch = "master",
-		cmd = {
-			"Eview",
-			"Econtroller",
-			"Emodel",
-			"Smodel",
-			"Sview",
-			"Scontroller",
-			"Vmodel",
-			"Vview",
-			"Vcontroller",
-			"Tmodel",
-			"Tview",
-			"Tcontroller",
-			"Rails",
-			"Generate",
-			"Runner",
-			"Extract",
-		},
-	},
-	-- Underlines the word under the cursor  [https://github.com/itchyny/vim-cursorword]
-	-- {
-	-- 	"itchyny/vim-cursorword",
-	-- 	branch = "master",
-	-- 	event = { "BufEnter", "BufNewFile" },
-	-- 	config = function()
-	-- 		vim.api.nvim_command("augroup user_plugin_cursorword")
-	-- 		vim.api.nvim_command("autocmd!")
-	-- 		vim.api.nvim_command("autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0")
-	-- 		vim.api.nvim_command("autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif")
-	-- 		vim.api.nvim_command("autocmd InsertEnter * let b:cursorword = 0")
-	-- 		vim.api.nvim_command("autocmd InsertLeave * let b:cursorword = 1")
-	-- 		vim.api.nvim_command("augroup END")
-	-- 	end,
-	-- },
 	-- interactive vertical scrollbars  [https://github.com/dstein64/nvim-scrollview]
 	--[[ see :help scrollview-configuration
         :ScrollViewDisable command disables scrollbars
@@ -1993,13 +2052,11 @@ lvim.plugins = {
 	{
 		"dstein64/nvim-scrollview",
 		branch = "main",
-	},
-	-- Syntax files for Solidity, the contract-oriented programming language for Ethereum
-	-- [https://github.com/tomlion/vim-solidity]
-	{
-		"tomlion/vim-solidity",
-		branch = "master",
-		ft = { "solidity" },
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-lua/plenary.nvim" },
+		},
 	},
 }
 
@@ -2012,13 +2069,20 @@ vim.g.markdown_fenced_languages = {
 
 -- [https://www.lunarvim.org/languages/#server-setup]
 -- Add the server you wish to configure manually to lvim.lsp.override
-vim.list_extend(lvim.lsp.override, { "tsserver", "astro_language_server", "tailwindcss", "dartls", "rust", "jsonls" })
+vim.list_extend(lvim.lsp.override, { "tsserver", "tailwindcss", "jsonls" })
 --- list of options that should take predence over any of LunarVim's defaults
 --- check the lspconfig documentation for a list of all possible options
 local tsopts = {
 	-- Needed for inlayHints. Merge this table with your settings or copy
 	-- it from the source if you want to add your own init_options.
 	init_options = require("nvim-lsp-ts-utils").init_options,
+	filetypes = {
+		-- "astro",
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+	},
 	on_attach = function(client, bufnr)
 		local ts_utils = require("nvim-lsp-ts-utils")
 
@@ -2028,7 +2092,7 @@ local tsopts = {
 			disable_commands = false,
 			enable_import_on_completion = true,
 			-- import all
-			import_all_timeout = 5000, -- ms
+			import_all_timeout = 2000, -- ms
 			-- lower numbers = higher priority
 			import_all_priorities = {
 				same_file = 1, -- add to existing import statement
@@ -2075,31 +2139,6 @@ local json_opts = {
 	},
 }
 require("lvim.lsp.manager").setup("jsonls", json_opts)
-
--- local utils = require("lvim.utils")
-
--- local function find_root_dir()
--- 	local util = require("lspconfig/util")
--- 	local lsp_utils = require("lvim.lsp.utils")
-
--- 	local ts_client = lsp_utils.is_client_active("typescript")
--- 	if ts_client then
--- 		return ts_client.config.root_dir
--- 	end
--- 	local dirname = vim.fn.expand("%:p:h")
--- 	return util.root_pattern("package.json")(dirname)
--- end
-
--- local function from_node_modules(command)
--- 	local root_dir = find_root_dir()
-
--- 	if not root_dir then
--- 		return nil
--- 	end
-
--- 	local join_paths = require("lvim.utils").join_paths
--- 	return join_paths(root_dir, "node_modules", ".bin", command)
--- end
 
 local tw_opts = {
 	cmd = { "tailwindcss-language-server", "--stdio" },
@@ -2222,81 +2261,55 @@ npm install -g @tailwindcss/language-server
 }
 require("lvim.lsp.manager").setup("tailwindcss", tw_opts)
 
+local lspconfig = require("lspconfig")
 local configs = require("lspconfig.configs")
 
--- astro lsp setup
-local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
-local my_capabilities = require("cmp_nvim_lsp").update_capabilities(lsp_capabilities)
-my_capabilities.textDocument.completion.completionItem.snippetSupport = true
-local astro_opts = {
-	init_options = { hostInfo = "neovim" },
-	cmd = {
-		"/home/thacken/.nvm/versions/node/v16.7.0/lib/node_modules/@astrojs/language-server/bin/server.js",
-		"--stdio",
-	},
-	-- cmd = { from_node_modules("astro-ls"), "--stdio" },
-	filetypes = {
-		"astro",
-		"astro-markdown",
-		-- "javascript",
-		-- "javascriptreact",
-		-- "typescript",
-		-- "typescriptreact",
-		"html",
-	},
-	on_new_config = function(new_config)
-		if not new_config.settings then
-			new_config.settings = {}
-		end
-		if not new_config.settings.editor then
-			new_config.settings.editor = {}
-		end
-		if not new_config.settings.editor.tabSize then
-			-- set tab size for hover
-			new_config.settings.editor.tabSize = vim.lsp.util.get_effective_tabstop()
-		end
-	end,
-	root_dir = function(fname)
-		local util = require("lspconfig.util")
-		-- return require("lspconfig.util").root_pattern("package.json", ".git")(fname) -- "tsconfig.json", "jsconfig.json",
-		-- return util.root_pattern("package.json", "jsconfig.json", "tsconfig.json", ".git")(fname)
-		return util.root_pattern("package.json", "tsconfig.json", ".git")(fname)
-			or util.find_package_json_ancestor(fname)
-			or util.find_node_modules_ancestor(fname)
-			or util.find_git_ancestor(fname)
-	end,
-	docs = {
-		description = "https://github.com/snowpackjs/astro-language-tools",
-		root_dir = [[root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")]],
-	},
-	capabilities = my_capabilities,
-}
-configs.astro_language_server = {
-	default_config = astro_opts,
-}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require("lvim.lsp.manager").setup("astro_language_server", astro_opts)
-
--- configs.ls_emmet = {
--- 	default_config = {
--- 		filetypes = {
--- 			"javascript",
--- 			"typescript",
--- 			"typescriptreact",
--- 			"javascriptreact",
--- 			"html",
--- 			"css",
--- 			"sass",
--- 			"scss",
--- 			"astro",
--- 			"vue",
--- 			"svelte",
--- 		},
--- 		autostart = true,
--- 		cmd = { "ls_emmet", "--stdio" },
--- 		root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
--- 	},
--- }
+if not configs.ls_emmet then
+	configs.ls_emmet = {
+		default_config = {
+			cmd = { "ls_emmet", "--stdio" },
+			filetypes = {
+				"html",
+				"css",
+				"scss",
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+				"vue",
+				"svelte",
+				"astro",
+				"haml",
+				"xml",
+				"xsl",
+				"pug",
+				"slim",
+				"sass",
+				"stylus",
+				"less",
+				"sss",
+				"hbs",
+				"handlebars",
+			},
+			root_dir = function(fname)
+				local util = require("lspconfig/util")
+				return util.root_pattern("tailwind.config.js", "tailwind.config.ts")(fname)
+					or util.root_pattern("postcss.config.js", "postcss.config.ts")(fname)
+					or util.find_package_json_ancestor(fname)
+					or util.find_node_modules_ancestor(fname)
+					or util.find_git_ancestor(fname)
+			end,
+			-- root_dir = function(fname)
+			--   return vim.loop.cwd()
+			-- end;
+			settings = {},
+		},
+	}
+end
+lspconfig.ls_emmet.setup({ capabilities = capabilities })
 
 local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
@@ -2392,36 +2405,25 @@ lvim.builtin.which_key.mappings["E"] = {
 	"Format (eslint_d)",
 }
 
+-- Chakra Theme  [/home/thacken/.config/lvim/lua/config]
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
+-- { "BufWinEnter", "*", ":filetype plugin indent on | :set nocompatible" },
+-- { "BufWinEnter", "*.ts,*.tsx,*.js,*.jsx", ":!eslint_d restart --cache --cache-location=/home/thacken/.config/.eslintcache" },
 lvim.autocommands.custom_groups = {
-	-- Chakra Theme  [/home/thacken/.config/lvim/lua/config]
 	{ "BufWinEnter", "*", ":highlight GitSignsAdd guifg='#58cdff'" }, -- GitSignsAddNr guifg=cyan
 	{ "BufWinEnter", "*", ":highlight GitSignsChange guifg='#c4b5fd'" }, -- GitSignsChangeNr guifg=orange
 	{ "BufWinEnter", "*", ":highlight GitSignsDelete guifg='#20e3b2'" }, -- GitSignsDeleteNr guifg=pink
-	-- Specify custom highlighting for ScrollView plugin
-	{ "BufWinEnter", "*", ":highlight ScrollView guibg=White" },
-	{ "BufWinEnter", "*", ":set nocompatible" },
-	{ "BufWinEnter", "*", ":filetype plugin indent on" },
-	{ "BufWinEnter", "*", ":syntax on" },
+	{ "BufWinEnter", "*", ":highlight ScrollView guibg='#bdc5e9'" },
 	{ "BufWinEnter", "*", ":hi default link RenamerNormal Normal" },
 	{ "BufWinEnter", "*", ":hi default link RenamerBorder RenamerNormal" },
 	{ "BufWinEnter", "*", ":hi default link RenamerTitle Identifier" },
-	-- {"InsertLeave", "*", ":Gitsigns toggle_linehl"},
-	-- {"InsertLeave", "*", ":Gitsigns toggle_current_line_blame"},
-	-- On entering a typescript/javascript
-	-- {"BufWinEnter", "*.ts,*.tsx,*.js,*.jsx", ":!eslint_d restart --cache --cache-location=/home/thacken/.config/.eslintcache"},
+	{ "BufWinEnter", "*", ":filetype plugin indent on" },
+	{ "BufWinEnter", "*", ":set nocompatible" },
 	{
 		"BufWinEnter",
-		"*.fish,*.sh,*.zsh,*.lua,*.vim,*.vimrc,*.toml,*.yml,*.yaml,*.conf",
+		"*.fish,*.sh,*.zsh,*.vim,*.vimrc,*.toml,*.yml,*.yaml,*.conf,*.config",
 		":setlocal ts=4 sw=4",
 	},
-	-- On entering insert mode in any file, scroll the window so the cursor line is centered
-	{ "InsertEnter", "*", ":normal zz" },
-	{ "BufWinEnter", "*.rust,*.rs,*.astro", ":filetype plugin indent on" },
-	-- Handle astro filetype  [https://neovim.io/doc/user/filetype.html#filetype]
-	-- { "BufWinEnter", "*.astro", ":syntax on" },
-	{ "BufWinEnter", "*.astro", ":set syntax=typescriptreact" },
-	{ "BufWinEnter", "*.astro", ":setfiletype astro" },
-	{ "BufRead", "*.astro", ":setfiletype astro" },
-	{ "BufNewFile", "*.astro", ":setfiletype astro" },
+	{ "InsertEnter", "*", ":normal zz" }, -- scroll the window so the cursor line is centered
+	{ "FileType", "*.astro", ":setlocal syntax=typescriptreact ts=2 sw=2" },
 }

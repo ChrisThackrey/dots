@@ -1,0 +1,72 @@
+{
+  // Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "spaceInPlace": {
+    "prefix": "spaceInPlace",
+    "body": "$0 ",
+    "description": "Add a space while cursor remains in-place"
+  },
+  "openBrackets": {
+    "prefix": "openBrackets",
+    "body": " $0 ",
+    "description": "Insert two spaces around cursor"
+  },
+  "Prettier Pragma": {
+    "prefix": "pretty",
+    "body": "$BLOCK_COMMENT_START @prettier $BLOCK_COMMENT_END",
+    "description": "Insert Prettier formatting pragma"
+  },
+  "Prettier Ignore": {
+    "prefix": "prettyignore",
+    "body": "$BLOCK_COMMENT_START prettier-ignore $BLOCK_COMMENT_END",
+    "description": "Prettier Formatting Ignore File"
+  },
+  "OneDrive Check": {
+    "prefix": "ond",
+    "body": "$BLOCK_COMMENT_START onedrive $BLOCK_COMMENT_END",
+    "description": "Make sure OneDrive file saved correctly"
+  },
+  "inlineComment": {
+    "prefix": "commentInline",
+    "body": " $LINE_COMMENT ",
+    "description": "Insert a comment inline"
+  },
+  "inlineCommentHTML": {
+    "prefix": "commentInlineHTML",
+    "body": " $BLOCK_COMMENT_START $1 $BLOCK_COMMENT_END",
+    "description": "Insert a comment inline HTML"
+  },
+  "Split_Tags": {
+    "prefix": "splitTags",
+    "body": "\n\t$1\n",
+    "description": "Split HTML tags and tab in"
+  },
+  "Tagify": {
+    "prefix": "tagify",
+    "body": ["<$CLIPBOARD>"],
+    "description": "Wrap selected text with tags"
+  },
+  "Tagify2": {
+    "prefix": "tagify2",
+    "body": "<$CLIPBOARD $1 />",
+    "description": "Wrap selected text with tags (single element)"
+  },
+  "tagifyHelper": {
+    "prefix": "tagifyHelper",
+    "body": " $1 /$2"
+  }
+}

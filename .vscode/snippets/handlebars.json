@@ -1,0 +1,65 @@
+{
+  // Place your snippets for handlebars here. Each snippet is defined under a snippet name and has a prefix, body and
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+  // same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "Handlebars_Expression": {
+    "prefix": "hbx",
+    "body": "{{$1}}",
+    "description": "Simple Handlebars Expression"
+  },
+  "Handlebars_Trailing_Comment": {
+    "prefix": "hbc",
+    "body": " {{! $1 }}",
+    "description": "Handlebars Trailing Comment"
+  },
+  "Handlebars_Each": {
+    "prefix": "hbeach",
+    "body": "{{#each $1}}\n\t$2\n{{/each}}",
+    "description": "Handlebars Each Expression"
+  },
+  "Handlebars_With": {
+    "prefix": "hbwith",
+    "body": "{{#with $1}}\n\t$2\n{{/with}}",
+    "description": "Handlebars With Expression"
+  },
+  "Handlebars_If": {
+    "prefix": "hbif",
+    "body": "{{#if $1}}\n\t$2\n{{/if}}",
+    "description": "Handlebars If Statement"
+  },
+  "Handlebars_If_Else": {
+    "prefix": "hbifelse",
+    "body": "{{#if $1}}\n\t$2\n{{else}}\n\t$3\n{{/if}}",
+    "description": "Handlebars If-Else Statement"
+  },
+  "Handlebars_Unless": {
+    "prefix": "hbunless",
+    "body": "{{#unless $1}}\n\t$2\n{{/unless}}",
+    "description": "Handlebars Unless Statement"
+  },
+  "Handlebars_Partial": {
+    "prefix": "hbpartial",
+    "body": "{{> $1 }}",
+    "description": "Handlebars Partial Expression"
+  },
+  "Handlebars_Dynamic_Partial": {
+    "prefix": "hbdpartial",
+    "body": "{{> ($1) }}",
+    "description": "Handlebars Dynamic Partial Expression"
+  },
+  "Handlebars_Partial_Block": {
+    "prefix": "hbbpartial",
+    "body": "{{#> $1 }}\n\t$2\n{{/$1}}",
+    "description": "Handlebars Partial Block Expression"
+  }
+}

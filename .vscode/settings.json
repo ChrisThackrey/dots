@@ -6,11 +6,11 @@
   "editor.rulers": [90],
   "editor.wordWrapColumn": 90,
   "html.format.wrapLineLength": 90,
-  "editor.autoIndent": "full",
+  // "editor.autoIndent": "full",
+  // "editor.wrappingStrategy": "simple",
+  // "editor.wrappingIndent": "deepIndent",
   "editor.hover.enabled": true,
-  "editor.wrappingIndent": "deepIndent",
   "editor.showDeprecated": true,
-  "editor.wrappingStrategy": "simple",
   "editor.renderLineHighlightOnlyWhenFocus": true,
   "editor.smartSelect.selectLeadingAndTrailingWhitespace": true,
   "editor.unfoldOnClickAfterEndOfLine": true,
@@ -19,7 +19,7 @@
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,
   "editor.formatOnType": false,
-  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  // "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     // "source.fixAll.eslint": true,
@@ -76,14 +76,14 @@
   "rewrap.autoWrap.enabled": false,
   "editor.detectIndentation": false,
   "editor.emptySelectionClipboard": false,
-  "editor.maxTokenizationLineLength": 500000,
+  "editor.maxTokenizationLineLength": 50000,
   "editor.autoClosingDelete": "always",
   "editor.linkedEditing": true,
   "editor.insertSpaces": true,
   "editor.overviewRulerBorder": true,
   "editor.scrollBeyondLastLine": false,
   "editor.find.addExtraSpaceOnTop": false,
-  "editor.cursorSurroundingLines": 5,
+  // "editor.cursorSurroundingLines": 5,
   "eslint.quiet": false,
   //   "bracket-pair-colorizer-2.colors": [
   //     "#f82a5d", "#f57f00", "#e7df60", "#98d800", "#5ccaef", "#a57fff"
@@ -154,33 +154,34 @@
   "explorer.sortOrderLexicographicOptions": "upper",
   "projectManager.sortList": "Recent",
   "workbench.editor.untitled.hint": "hidden",
+  "prettier.parser": "typescript",
   // ---------------------------------------------------
   // GitHub Copilot
   // ---------------------------------------------------
+  "github.copilot.inlineSuggest.enable": true,
   "github.copilot.advanced": {
+    "length": 1000,
+    "temperature": "0.8",
     "debug.useProxy": true,
-    "inlineSuggestCount": 5,
-    "inlineSuggestCount.max": 10,
-    "length": 2000 // Default: 500
+    "listCount": 10,
+    "indentationMode": {
+      "python": false,
+      "javascript": false,
+      "javascriptreact": false,
+      "jsx": false,
+      "typescript": false,
+      "typescriptreact": false,
+      "go": false,
+      "ruby": false,
+      "*": true
+    }
   },
-  // Show autocomplete suggestions
-  // "github.copilot.autocomplete.enable": false, // Default: false
-  // Number of solutions to list in Open Copilot
-  // "github.copilot.list.count": 10, // Default: 10
-  // Number of autocomplete suggestions to fetch
-  // "github.copilot.autocomplete.count": 3, // Default: 3
-  // Enable or disable Copilot for specified [languages]
   "github.copilot.enable": {
     "*": true,
     "yaml": false,
-    "plaintext": true,
-    "markdown": true,
-    "json": true
+    "plaintext": false,
+    "markdown": false
   },
-  // Show inline suggestions
-  "github.copilot.inlineSuggest.enable": true, // Default: true
-  // Number of inline suggestions to fetch
-  // "github.copilot.inlineSuggest.count": 4, // Default: 3
   // ---------------------------------------------------
   // Wallaby
   // ---------------------------------------------------
@@ -215,7 +216,7 @@
   // Controls if quick suggestions should show up while typing
   // By default VS Code will not trigger completions when editing "string" content.
   "editor.quickSuggestions": {
-    // "all": true,
+    "all": true,
     "other": true,
     "comments": true,
     "strings": true
@@ -225,7 +226,7 @@
   // Controls if pressing tab inserts the best suggestion and if tab cycles through other suggestions
   "editor.tabCompletion": "on",
   "editor.acceptSuggestionOnCommitCharacter": false,
-  "editor.quickSuggestionsDelay": 400,
+  // "editor.quickSuggestionsDelay": 400,
   "editor.suggest.filterGraceful": true,
   "editor.suggest.insertMode": "replace",
   // Controls if suggestions should automatically show up when typing trigger characters
@@ -357,18 +358,23 @@
   "files.maxMemoryForLargeFilesMB": 12288,
   // Configure glob patterns for excluding files and folders
   "files.exclude": {
+    ".quasar": true,
     ".yarn": true,
     "**/*.pyc": true,
     "**/cargo-cache/**": true,
     "**/.github": true
   },
   "files.watcherExclude": {
+    // "node_modules/**": true,
     ".yarn": true,
     "**/*.pyc": true,
     "**/.cargo/**": true,
     "**/.git/**": true,
     "**/cargo-cache/**": true,
-    "**/target/**": true
+    "**/target/**": true,
+    // "package-lock.json": true,
+    "yarn.lock": true,
+    "**/*.lock": true
   },
   "files.insertFinalNewline": false,
   "files.removeFinalNewlines": true,
@@ -405,7 +411,7 @@
     "typescript": "html",
     "typescriptreact": "html"
   },
-  "editor.semanticHighlighting.enabled": true,
+  "editor.semanticHighlighting.enabled": false,
   "editor.semanticTokenColorCustomizations": {
     "enabled": true
   },
@@ -1221,9 +1227,9 @@
   "turboConsoleLog.insertEnclosingFunction": false,
   "turboConsoleLog.logMessagePrefix": "",
   "turboConsoleLog.quote": "'",
-  //
+  // -------------------------------------------------------------------------------------
   // Indent Rainbow
-  //
+  // -------------------------------------------------------------------------------------
   "indentRainbow.ignoreErrorLanguages": ["*"],
   "indentRainbow.colors": [
     "rgba(16,16,16,0.1)",
@@ -1232,9 +1238,9 @@
     "rgba(16,16,16,0.36)",
     "rgba(16,16,16,0.2)"
   ],
-  //
+  // -------------------------------------------------------------------------------------
   // Guides
-  //
+  // -------------------------------------------------------------------------------------
   "guides.overrideDefault": false,
   "guides.active.extraIndent": true,
   "guides.active.color.dark": "#8494A4",
@@ -1244,18 +1250,18 @@
   "guides.normal.enabled": false,
   "guides.indent.showFirstIndentGuides": false,
   "guides.active.expandBrackets": false,
-  //
+  // -------------------------------------------------------------------------------------
   // Footsteps (Edit History Highlighter)
-  //
+  // -------------------------------------------------------------------------------------
   "footsteps.highlightColor": "rgb(153, 128, 250)",
-  "footsteps.highlightColorMaxOpacity": 0.18,
+  "footsteps.highlightColorMaxOpacity": 0.14,
   "footsteps.doHighlightChanges": true,
   "footsteps.doHighlightCurrentlyFocusedChunk": false,
   "footsteps.maxNumberOfChangesToRemember": 120,
   "footsteps.maxNumberOfChangesToHighlight": 16,
-  //
+  // -------------------------------------------------------------------------------------
   // Scoper
-  //
+  // -------------------------------------------------------------------------------------
   "scoper.highlightColor": "#ffffff06",
   "scoper.endColor": "#626483",
   "scoper.squareBrackets": true,
@@ -1264,9 +1270,9 @@
   "scoper.onlyShowIndentedScopes": true,
   "scoper.overviewColor": "#8252be", // #c4b5fd #6B89FF
   "scoper.parentheses": true,
-  //
+  // -------------------------------------------------------------------------------------
   // Highlight Matching Tag
-  //
+  // -------------------------------------------------------------------------------------
   "highlight-matching-tag.enabled": true,
   "highlight-matching-tag.showRuler": true,
   "highlight-matching-tag.noDefaultEmptyElements": true,
@@ -1449,7 +1455,7 @@
   "javascript.suggest.completeJSDocs": true,
   "javascript.suggest.jsdoc.generateReturns": true,
   "javascript.suggest.includeCompletionsForImportStatements": true,
-  "javascript.suggest.completeFunctionCalls": false,
+  "javascript.suggest.completeFunctionCalls": true,
   "javascript.suggest.names": false,
   "javascript.suggest.paths": false,
   "javascript.inlayHints.variableTypes.enabled": true,
@@ -1547,7 +1553,7 @@
   "typescript.disableAutomaticTypeAcquisition": false,
   "typescript.npm": "/home/thacken/.nvm/versions/node/v16.7.0/lib",
   "typescript.preferences.useAliasesForRenames": true,
-  "typescript.suggest.includeCompletionsWithSnippetText": false,
+  "typescript.suggest.includeCompletionsWithSnippetText": true,
   "typescript.tsserver.pluginPaths": [],
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.reportStyleChecksAsWarnings": true,
@@ -1693,7 +1699,8 @@
     "editor.wordWrapColumn": 80,
     "editor.quickSuggestions": false,
     "editor.rulers": [80],
-    "editor.minimap.maxColumn": 80
+    "editor.minimap.maxColumn": 80,
+    "editor.defaultFormatter": "Trunk.io"
   },
   //
   // Lua
@@ -1751,7 +1758,7 @@
   "importCost.smallPackageColor": "#80FFEA",
   "importCost.mediumPackageColor": "#9580FF",
   "importCost.largePackageColor": "#FF9580",
-  "importCost.timeout": 24000,
+  // "importCost.timeout": 24000,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   //
   // HTML
@@ -2946,5 +2953,8 @@
   "errorLens.margin": "6ch",
   "editor.scrollbar.horizontalScrollbarSize": 16,
   "editor.showFoldingControls": "always",
-  "editor.glyphMargin": false
+  "editor.glyphMargin": false,
+  "http.systemCertificates": false,
+  "editor.minimap.enabled": false,
+  "trunk.trunkGrayOutNonBlockingIssues": false
 }

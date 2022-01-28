@@ -1,0 +1,90 @@
+{
+  // Place your snippets for ejs here. Each snippet is defined under a snippet name and has a prefix, body and
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+  // same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "EJS_Tag": {
+    "prefix": "ejstag",
+    "body": "<%$1 $2 %>",
+    "description": "Basic EJS Tag"
+  },
+  "EJS_Equals": {
+    "prefix": "ejs=",
+    "body": "<%= $1 %>",
+    "description": "Basic EJS Equals Tag"
+  },
+  "EJS_Minus": {
+    "prefix": "ejs-",
+    "body": "<%- $1 %>",
+    "description": "Basic EJS Minus Tag"
+  },
+  "EJS_If": {
+    "prefix": "ejsif",
+    "body": "<% if ($1) { %>\n\t$2\n<% } %>",
+    "description": "EJS If-Statement Syntax"
+  },
+  "EJS_If_Else": {
+    "prefix": "ejsef",
+    "body": "<% if ($1) { %>\n\t$2\n<% } else { %>\n\t$3\n<% } %>",
+    "description": "EJS If-Else Syntax"
+  },
+  "EJS_Else_If": {
+    "prefix": "ejsefe",
+    "body": "<% if ($1) { %>\n\t$2\n<% } else if ($3) { %>\n\t$4\n<% } else { %>\n\t$5\n<% } %>",
+    "description": "EJS Else-If Syntax"
+  },
+  "EJS_ForEach": {
+    "prefix": "ejsloop-foreach",
+    "body": "<% $1.forEach(($2) => { %>\n\t$3\n<% }) %>",
+    "description": "EJS For-Each Syntax"
+  },
+  "EJS_Map": {
+    "prefix": "ejsmap",
+    "body": "<% $1.map(($2) => { %>\n\t$3\n<% }) %>",
+    "description": "EJS Map Function Syntax"
+  },
+  "EJS_Include": {
+    "prefix": "ejsinclude",
+    "body": "<%- include('$1') %>",
+    "description": "EJS Include Statement"
+  },
+  "EJS_Comment": {
+    "prefix": "ejscomment",
+    "body": "<%# $1 %>",
+    "description": "Simple EJS Comment"
+  },
+  "EJS_Block_Comment": {
+    "prefix": "ejsblock",
+    "body": "<%/* $1 */%>",
+    "description": "Simple EJS Block Comment"
+  },
+  "EJS_Trailing_Comment": {
+    "prefix": "ejsafter",
+    "body": " <%# $1 %>",
+    "description": "EJS Trailing Comment"
+  },
+  "EJS_Block_Comment_Start": {
+    "prefix": "ejsstart",
+    "body": "<% /* %>",
+    "description": "EJS Comment Starting Tag"
+  },
+  "EJS_Block_Comment_End": {
+    "prefix": "ejsend",
+    "body": "<% */ %>",
+    "description": "EJS Comment Ending Tag"
+  },
+  "EJS_Block_Comment_Full": {
+    "prefix": "ejsfull",
+    "body": "<% /* %>$1<% */ %>",
+    "description": "Both EJS Comment Tags"
+  }
+}
