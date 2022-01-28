@@ -8,4 +8,10 @@ if type -q exa
   alias ltg 'exa -aT --icons --group-directories-first --git'
 end
 
-nvm use 16.7.0 > /dev/null 2>&1
+if ! test -f .nvmrc;
+  nvm use 16.13.2 > /dev/null 2>&1
+  else
+    if test -r .nvmrc;
+      nvm use > /dev/null 2>&1
+      end
+  end
