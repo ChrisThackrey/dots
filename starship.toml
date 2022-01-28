@@ -2,18 +2,14 @@
 add_newline = false
 
 format = """
-${custom.tztime}\
-${custom.uptime}\
 $cmd_duration\
 $env_var\
-$time\
+$time \
 $jobs\
 $line_break\
 $status\
 $username\
 $hostname\
-$shlvl\
-$kubernetes\
 $directory\
 $git_branch\
 $git_commit\
@@ -21,39 +17,32 @@ $git_state\
 $git_status\
 $hg_branch\
 $docker_context\
-$package\
-$cmake\
 $nodejs\
-$perl\
-$battery\
 $python\
 $ruby\
 $rust\
 $terraform\
-$vagrant\
-$nix_shell\
-$conda\
 $lua\
 $aws\
 $line_break\
 $character"""
 
-scan_timeout = 30 # wait 30ms for Starship to CWD files
-command_timeout = 200
+scan_timeout = 20 # wait 20ms for Starship to CWD files
+# command_timeout = 200
 
 [custom.bash]
 command = "echo 🚀"
 when = '[ "$STARSHIP_SHELL" == "bash" ]'
-disabled = false
+disabled = true
 
 # Indicates when in fish shell.
 [custom.fish]
 command = "echo 🐠"
 when = 'test "$STARSHIP_SHELL" = "fish"'
-disabled = false
+disabled = true
 
 [character] # The name of the module we are configuring is "character"
-success_symbol = "   [λ](white)"
+success_symbol = "   [λ](bright-blue)"
 error_symbol = "   [λ](bold bright-red)"
 disabled = false
 
@@ -65,8 +54,8 @@ format = "[$path]($style)[$read_only]($read_only_style) "
 disabled = false
 
 [cmd_duration]
-min_time = 1000                     # Show command duration over 10,000 milliseconds (=10 sec)
-format = '[⏱ $duration](dimmed blue)'
+min_time = 100
+format = '[⏱ $duration                        ](dimmed blue)'
 show_milliseconds = true
 min_time_to_notify = -1
 disabled = false
@@ -75,7 +64,7 @@ disabled = false
 command = 'date +"%l:%M%p"'
 when = "true"
 format = ' [\[$symbol($output)\] ](bright-black)'
-disabled = false
+disabled = true
 
 [status]
 format = '[\[$status - $common_meaning\]](green)'
@@ -247,8 +236,8 @@ disabled = true
 disabled = true
 
 [time]
-disabled = true
-format = '[\[ $time \]]($style) '
+disabled = false
+format = '[ \[$time\]](bright-black) '
 # format = '[\[$time\]](green) '
 # time_format = "%a %b %d %Y %l:%M%p (%z)"
 
@@ -264,12 +253,12 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 disabled = true
 
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]] # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold italic red"
 disabled = true
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold italic yellow"
 disabled = true
