@@ -1,5 +1,68 @@
-#!/usr/bin sh
+#!/usr/bin/env sh
 
-arg1=$1 # $arg1
+# for this to work you must configure sudo such that
+# it will be able to run the command without password
 
+# sudo yabai --load-sa
+# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
+# global settings
+# focus window that your mouse hovers on (disabled due to right click bugs)
+yabai -m config mouse_follows_focus          off
+yabai -m config window_shadow                off
+yabai -m config window_opacity               off
+yabai -m config active_window_opacity        1.0
+yabai -m config normal_window_opacity        1.0
+yabai -m config window_placement             first_child
+# floating windows always stay on top
+yabai -m config window_topmost               off
+# enable borders
+yabai -m config window_border                off
+yabai -m config window_border_width          5
+yabai -m config active_window_border_color   0xb45bcf50
+yabai -m config normal_window_border_color   0x9580ffaa
+##
+yabai -m config insert_feedback_color        0xff61afef
+yabai -m config split_ratio                  0.50
+# don't automatically rebalance windows
+yabai -m config auto_balance                 on
+yabai -m config mouse_modifier               fn
+# swap windows if moved with mouse
+yabai -m config mouse_action1                move
+# resize windows if resized with mouse
+yabai -m config mouse_action2                resize
+yabai -m config mouse_drop_action            swap
+
+# general space settings
+yabai -m config layout                       bsp
+yabai -m config top_padding                  4
+yabai -m config bottom_padding               4
+yabai -m config left_padding                 4
+yabai -m config right_padding                4
+yabai -m config window_gap                   4
+
+yabai -m space 1 --label I
+yabai -m space 2 --label II
+yabai -m space 3 --label III
+yabai -m space 4 --label IV
+yabai -m space 5 --label V
+yabai -m space 6 --label VI
+yabai -m space 7 --label VII
+yabai -m space 8 --label VIII
+yabai -m space 9 --label IX
+yabai -m space 10 --label X
+
+# yabai -m rule --add app="Google Chrome" space=1
+# yabai -m rule --add app="Alacritty"     space=2
+# ^^ these are annoying
+yabai -m rule --add app="Safari"        space=3
+yabai -m rule --add app="Spotify"       space=4
+yabai -m rule --add app="Discord"       space=5
+
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
+
+yabai -m config external_bar all:27:0
+# yabai -m config external_bar all:0:0
+
+echo "yabai config loaded.."
