@@ -1,0 +1,71 @@
+window:
+  padding:
+    x: 16
+    y: 16
+  decorations: buttonless
+  opacity: 1
+  dynamic_title: false
+scrolling:
+  history: 10000
+  multiplier: 3
+
+font:
+  normal:
+    family: Liga SFMono Nerd Font
+    style: Regular
+  bold:
+    family: Liga SFMono Nerd Font
+    style: Bold
+
+  italic:
+    family: Liga SFMono Nerd Font
+    style: Italic
+  bold_italic:
+    family: Liga SFMono Nerd Font
+    style: Bold Italic
+  size: 16.0
+  offset:
+    x: 1
+    y: 1
+  glyph_offset:
+    y: 1
+    x: 0
+  use_thin_strokes: false
+
+colors:
+  primary:
+    background: '0x191724'
+    foreground: '0xe0def4'
+  cursor:
+    text: '0x191724'
+    cursor: '0x796268'
+  vi_mode_cursor:
+    text: '0x191724'
+    cursor: '0x796268'
+  line_indicator:
+    foreground: None
+    background: None
+  selection:
+    text: CellForeground
+    background: '0x2A2738'
+  normal:
+    black: '0x6e6a86'
+    red: '0xeb6f92'
+    green: '0x9ccfd8'
+    yellow: '0xf6c177'
+    blue: '0x31748f'
+    magenta: '0xc4a7e7'
+    cyan: '0xebbcba'
+    white: '0xe0def4'
+  bright:
+    black: '0x6e6a86'
+    red: '0xeb6f92'
+    green: '0x9ccfd8'
+    yellow: '0xf6c177'
+    blue: '0x31748f'
+    magenta: '0xc4a7e7'
+    cyan: '0xebbcba'
+    white: '0xe0def4'
+selection:
+  save_to_clipboard: true
+live_config_reload: true
