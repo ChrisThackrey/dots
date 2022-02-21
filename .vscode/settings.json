@@ -89,7 +89,7 @@
   //     "#f82a5d", "#f57f00", "#e7df60", "#98d800", "#5ccaef", "#a57fff"
   // ],
   "explorer.openEditors.visible": 8,
-  "explorer.confirmDelete": true,
+  "explorer.confirmDelete": false,
   // Controls if file decorations should use badges.
   "explorer.decorations.badges": true,
   // Disable GIT colors for files
